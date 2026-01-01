@@ -1,0 +1,337 @@
+// Strapi API integration
+// This file handles all communication with Strapi CMS
+
+const STRAPI_URL =
+  process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:1337";
+const STRAPI_API_TOKEN = process.env.STRAPI_API_TOKEN;
+
+interface StrapiResponse<T> {
+  data: T;
+  meta?: {
+    pagination?: {
+      page: number;
+      pageSize: number;
+      pageCount: number;
+      total: number;
+    };
+  };
+}
+
+interface StrapiImage {
+  id: number;
+  attributes: {
+    url: string;
+    alternativeText: string | null;
+    width: number;
+    height: number;
+    formats?: {
+      thumbnail?: { url: string };
+      small?: { url: string };
+      medium?: { url: string };
+      large?: { url: string };
+    };
+  };
+}
+
+// Types for Strapi content
+export interface HeroContent {
+  id: number;
+  attributes: {
+    title: string;
+    subtitle: string;
+    description: string;
+    ctaText: string;
+    ctaLink: string;
+    backgroundImage?: { data: StrapiImage };
+  };
+}
+
+export interface MissionContent {
+  id: number;
+  attributes: {
+    title: string;
+    description: string;
+    points: {
+      id: number;
+      text: string;
+    }[];
+  };
+}
+
+export interface Projection {
+  id: number;
+  attributes: {
+    title: string;
+    description: string;
+    year: string;
+    order: number;
+  };
+}
+
+export interface AboutContent {
+  id: number;
+  attributes: {
+    name: string;
+    title: string;
+    bio: string;
+    image?: { data: StrapiImage };
+    achievements: {
+      id: number;
+      text: string;
+    }[];
+  };
+}
+
+export interface Course {
+  id: number;
+  attributes: {
+    title: string;
+    description: string;
+    duration: string;
+    format: string;
+    image?: { data: StrapiImage };
+    order: number;
+  };
+}
+
+export interface ContactInfo {
+  id: number;
+  attributes: {
+    email: string;
+    phone?: string;
+    address?: string;
+    partnershipTitle: string;
+    partnershipDescription: string;
+  };
+}
+
+export interface SiteSettings {
+  id: number;
+  attributes: {
+    siteName: string;
+    logo?: { data: StrapiImage };
+    footerText: string;
+    socialLinks?: {
+      id: number;
+      platform: string;
+      url: string;
+    }[];
+  };
+}
+
+// Helper to get full image URL
+export function getStrapiImageUrl(
+  image?: StrapiImage | { data: StrapiImage | null }
+): string | null {
+  if (!image) return null;
+
+  const imageData = "data" in image ? image.data : image;
+  if (!imageData) return null;
+
+  const url = imageData.attributes.url;
+
+  // If URL is already absolute, return it
+  if (url.startsWith("http")) return url;
+
+  // Otherwise, prepend Strapi URL
+  return `${STRAPI_URL}${url}`;
+}
+
+// Fetch helper with authentication
+async function fetchStrapi<T>(
+  endpoint: string,
+  options: RequestInit = {}
+): Promise<T | null> {
+  const url = `${STRAPI_URL}/api${endpoint}`;
+
+  const headers: Record<string, string> = {
+    "Content-Type": "application/json",
+  };
+
+  if (STRAPI_API_TOKEN) {
+    headers["Authorization"] = `Bearer ${STRAPI_API_TOKEN}`;
+  }
+
+  try {
+    const response = await fetch(url, {
+      ...options,
+      headers,
+      next: { revalidate: 60 }, // Revalidate every 60 seconds
+    });
+
+    if (!response.ok) {
+      console.error(
+        `Strapi fetch error: ${response.status} ${response.statusText}`
+      );
+      return null;
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Strapi fetch error:", error);
+    return null;
+  }
+}
+
+// API functions
+export async function getHeroContent(): Promise<HeroContent | null> {
+  const response = await fetchStrapi<StrapiResponse<HeroContent>>(
+    "/hero?populate=*"
+  );
+  return response?.data || null;
+}
+
+export async function getMissionContent(): Promise<MissionContent | null> {
+  const response = await fetchStrapi<StrapiResponse<MissionContent>>(
+    "/mission?populate=*"
+  );
+  return response?.data || null;
+}
+
+export async function getProjections(): Promise<Projection[]> {
+  const response = await fetchStrapi<StrapiResponse<Projection[]>>(
+    "/projections?populate=*&sort=order:asc"
+  );
+  return response?.data || [];
+}
+
+export async function getAboutContent(): Promise<AboutContent | null> {
+  const response = await fetchStrapi<StrapiResponse<AboutContent>>(
+    "/about?populate=*"
+  );
+  return response?.data || null;
+}
+
+export async function getCourses(): Promise<Course[]> {
+  const response = await fetchStrapi<StrapiResponse<Course[]>>(
+    "/courses?populate=*&sort=order:asc"
+  );
+  return response?.data || [];
+}
+
+export async function getContactInfo(): Promise<ContactInfo | null> {
+  const response = await fetchStrapi<StrapiResponse<ContactInfo>>(
+    "/contact-info?populate=*"
+  );
+  return response?.data || null;
+}
+
+export async function getSiteSettings(): Promise<SiteSettings | null> {
+  const response = await fetchStrapi<StrapiResponse<SiteSettings>>(
+    "/site-setting?populate=*"
+  );
+  return response?.data || null;
+}
+
+// Fallback content when Strapi is not available
+export const fallbackContent = {
+  hero: {
+    title: "Jewish Heritage Education and Advocacy Center",
+    subtitle: "Carrying the Message Across North America",
+    description:
+      "Based in Florida, the Jewish Heritage Education and Advocacy Center carries the message of the Jewish Museum of Chile across North America. By bringing memory to life through exhibitions, educational materials, and partnerships, we combat antisemitism and celebrate the fullness of Jewish heritage.",
+    ctaText: "Join Our Mission",
+    ctaLink: "#contact",
+  },
+  mission: {
+    title: "Our Mission",
+    description:
+      "Based in Florida, the Jewish Heritage Education and Advocacy Center carries the message of the Jewish Museum of Chile across North America. By bringing memory to life through exhibitions, educational materials, and partnerships, we combat antisemitism and celebrate the fullness of Jewish heritage.",
+    points: [
+      "Preserve and share Jewish heritage through education",
+      "Combat antisemitism through awareness and advocacy",
+      "Partner with institutions across North America",
+      "Connect communities through shared cultural experiences",
+    ],
+  },
+  projections: [
+    {
+      id: 1,
+      title: "Educational Materials",
+      description:
+        "Create and deliver impactful educational material on the Holocaust and Jewish culture.",
+      year: "2025-2028",
+    },
+    {
+      id: 2,
+      title: "Interactive Experiences",
+      description:
+        "Develop unique museum-style and educational experiences for communities.",
+      year: "2025-2028",
+    },
+    {
+      id: 3,
+      title: "Partnership Development",
+      description:
+        "Strengthen partnerships with the Jewish Museum of Chile and expand collaborative projects.",
+      year: "2025-2028",
+    },
+    {
+      id: 4,
+      title: "Community Engagement",
+      description:
+        "Engage with Jewish communities across the Americas through events and educational forums.",
+      year: "2025-2028",
+    },
+    {
+      id: 5,
+      title: "Technology & Innovation",
+      description:
+        "Leverage technology for virtual exhibitions and digital educational resources.",
+      year: "2025-2028",
+    },
+  ],
+  about: {
+    name: "Dalia Pollak",
+    title: "Executive Director",
+    bio: "Executive director of Jewish Heritage Education and Advocacy Center. Co-founder & President of the Jewish Museum of Chile Foundation. Daughter of a Romanian-born Holocaust survivor, deeply committed to memory, education, and community building.",
+    achievements: [
+      "Executive director of Jewish Heritage Education and Advocacy Center",
+      "Co-founder & President, Jewish Museum of Chile Foundation",
+      "Resides in the U.S. under an O-1 visa for extraordinary ability in education",
+      "A leading voice in Jewish education across Latin America",
+      "Established partnerships with ADL and USC Shoah Foundation",
+      "Founder of Red LAJD (Latin American Network for Holocaust Educators)",
+      "Serves on the Advisory Council of JCHL at Brandeis Center",
+      "Co-founder of ICOM International Council of Museums network",
+    ],
+  },
+  courses: [
+    {
+      id: 1,
+      title: "Holocaust Education Fundamentals",
+      description:
+        "Comprehensive course covering the history, impact, and lessons of the Holocaust for educators and community leaders.",
+      duration: "8 weeks",
+      format: "Online & In-Person",
+    },
+    {
+      id: 2,
+      title: "Jewish Heritage & Culture",
+      description:
+        "Explore the rich tapestry of Jewish traditions, customs, and cultural contributions throughout history.",
+      duration: "6 weeks",
+      format: "Online",
+    },
+    {
+      id: 3,
+      title: "Combating Antisemitism",
+      description:
+        "Learn effective strategies and approaches to identify, address, and prevent antisemitism in communities.",
+      duration: "4 weeks",
+      format: "Workshop Series",
+    },
+  ],
+  contact: {
+    email: "JHEACINFO@jewishheritageac.com",
+    partnershipTitle: "Interested in joining our global educational mission?",
+    partnershipDescription:
+      "Become a partner, host institution, or sponsor to bring Jewish history and the fight against hate to audiences across the United States and beyond.",
+  },
+  siteSettings: {
+    siteName: "Jewish Heritage Education and Advocacy Center",
+    footerText:
+      "© 2025 Jewish Heritage Education and Advocacy Center. All rights reserved.",
+  },
+};
