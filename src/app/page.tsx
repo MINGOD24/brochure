@@ -22,29 +22,16 @@ export const revalidate = 60; // Revalidate every 60 seconds
 
 export default async function Home() {
   // Fetch all content from Strapi (with fallbacks)
-  let heroData, missionData, projectionsData, coursesData, aboutData, contactData, siteSettings;
-  
-  try {
-    [heroData, missionData, projectionsData, coursesData, aboutData, contactData, siteSettings] = 
-      await Promise.all([
-        getHeroContent().catch(() => null),
-        getMissionContent().catch(() => null),
-        getProjections().catch(() => []),
-        getCourses().catch(() => []),
-        getAboutContent().catch(() => null),
-        getContactInfo().catch(() => null),
-        getSiteSettings().catch(() => null),
-      ]);
-  } catch (error) {
-    console.error("Error fetching Strapi content:", error);
-    heroData = null;
-    missionData = null;
-    projectionsData = [];
-    coursesData = [];
-    aboutData = null;
-    contactData = null;
-    siteSettings = null;
-  }
+  const [heroData, missionData, projectionsData, coursesData, aboutData, contactData, siteSettings] = 
+    await Promise.all([
+      getHeroContent().catch(() => null),
+      getMissionContent().catch(() => null),
+      getProjections().catch(() => []),
+      getCourses().catch(() => []),
+      getAboutContent().catch(() => null),
+      getContactInfo().catch(() => null),
+      getSiteSettings().catch(() => null),
+    ]);
 
   // Use Strapi data or fallback content (Strapi v5 flat structure)
   const hero = heroData || fallbackContent.hero;
