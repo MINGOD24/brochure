@@ -4,6 +4,7 @@ import Mission from "@/components/Mission";
 import Projections from "@/components/Projections";
 import Courses from "@/components/Courses";
 import About from "@/components/About";
+import Donate from "@/components/Donate";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 import {
@@ -122,6 +123,8 @@ export default async function Home() {
             : fallbackContent.about.achievements
         }
       />
+
+      <Donate />
 
       <Contact
         email={contact.email}

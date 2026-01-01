@@ -25,6 +25,7 @@ export default function Header({ siteName = "JHEAC", logoUrl }: HeaderProps) {
     { href: "#projections", label: "Projections" },
     { href: "#courses", label: "Courses" },
     { href: "#about", label: "About" },
+    { href: "#donate", label: "Donate" },
     { href: "#contact", label: "Contact" },
   ];
 
