@@ -22,58 +22,77 @@ export const revalidate = 60; // Revalidate every 60 seconds
 
 export default async function Home() {
   // Fetch all content from Strapi (with fallbacks)
-  const [
-    heroData,
-    missionData,
-    projectionsData,
-    coursesData,
-    aboutData,
-    contactData,
-    siteSettings,
-  ] = await Promise.all([
-    getHeroContent(),
-    getMissionContent(),
-    getProjections(),
-    getCourses(),
-    getAboutContent(),
-    getContactInfo(),
-    getSiteSettings(),
-  ]);
+  let heroData, missionData, projectionsData, coursesData, aboutData, contactData, siteSettings;
+  
+  try {
+    [heroData, missionData, projectionsData, coursesData, aboutData, contactData, siteSettings] = 
+      await Promise.all([
+        getHeroContent().catch(() => null),
+        getMissionContent().catch(() => null),
+        getProjections().catch(() => []),
+        getCourses().catch(() => []),
+        getAboutContent().catch(() => null),
+        getContactInfo().catch(() => null),
+        getSiteSettings().catch(() => null),
+      ]);
+  } catch (error) {
+    console.error("Error fetching Strapi content:", error);
+    heroData = null;
+    missionData = null;
+    projectionsData = [];
+    coursesData = [];
+    aboutData = null;
+    contactData = null;
+    siteSettings = null;
+  }
 
-  // Use Strapi data or fallback content
-  const hero = heroData?.attributes || fallbackContent.hero;
-  const mission = missionData?.attributes || fallbackContent.mission;
+  // Use Strapi data or fallback content (Strapi v5 flat structure)
+  const hero = heroData || fallbackContent.hero;
+  const mission = missionData || fallbackContent.mission;
+  
+  // Safely map projections with validation
   const projections =
-    projectionsData.length > 0
-      ? projectionsData.map((p) => ({
-          id: p.id,
-          title: p.attributes.title,
-          description: p.attributes.description,
-          year: p.attributes.year,
-        }))
+    projectionsData && projectionsData.length > 0
+      ? projectionsData
+          .filter((p) => p && p.title) // Filter out invalid entries
+          .map((p) => ({
+            id: p.id,
+            title: p.title,
+            description: p.description || "",
+            year: p.year || "",
+          }))
       : fallbackContent.projections;
 
+  // Use fallback if mapping resulted in empty array
+  const finalProjections = projections.length > 0 ? projections : fallbackContent.projections;
+
+  // Safely map courses with validation
   const courses =
-    coursesData.length > 0
-      ? coursesData.map((c) => ({
-          id: c.id,
-          title: c.attributes.title,
-          description: c.attributes.description,
-          duration: c.attributes.duration,
-          format: c.attributes.format,
-          imageUrl: getStrapiImageUrl(c.attributes.image),
-        }))
+    coursesData && coursesData.length > 0
+      ? coursesData
+          .filter((c) => c && c.title) // Filter out invalid entries
+          .map((c) => ({
+            id: c.id,
+            title: c.title,
+            description: c.description || "",
+            duration: c.duration || "",
+            format: c.format || "",
+            imageUrl: getStrapiImageUrl(c.image),
+          }))
       : fallbackContent.courses.map((c) => ({ ...c, imageUrl: null }));
 
-  const about = aboutData?.attributes || fallbackContent.about;
-  const contact = contactData?.attributes || fallbackContent.contact;
-  const settings = siteSettings?.attributes || fallbackContent.siteSettings;
+  // Use fallback if mapping resulted in empty array
+  const finalCourses = courses.length > 0 ? courses : fallbackContent.courses.map((c) => ({ ...c, imageUrl: null }));
+
+  const about = aboutData || fallbackContent.about;
+  const contact = contactData || fallbackContent.contact;
+  const settings = siteSettings || fallbackContent.siteSettings;
 
   return (
     <main className="min-h-screen">
       <Header
         siteName={settings.siteName}
-        logoUrl={getStrapiImageUrl(siteSettings?.attributes?.logo)}
+        logoUrl={siteSettings ? getStrapiImageUrl(siteSettings.logo) : null}
       />
 
       <Hero
@@ -83,9 +102,7 @@ export default async function Home() {
         ctaText={hero.ctaText}
         ctaLink={hero.ctaLink}
         backgroundImageUrl={
-          heroData
-            ? getStrapiImageUrl(heroData.attributes.backgroundImage)
-            : null
+          heroData ? getStrapiImageUrl(heroData.backgroundImage) : null
         }
       />
 
@@ -101,17 +118,15 @@ export default async function Home() {
         }
       />
 
-      <Projections projections={projections} />
+      <Projections projections={finalProjections} />
 
-      <Courses courses={courses} />
+      <Courses courses={finalCourses} />
 
       <About
         name={about.name}
         title={about.title}
         bio={about.bio}
-        imageUrl={
-          aboutData ? getStrapiImageUrl(aboutData.attributes.image) : null
-        }
+        imageUrl={aboutData ? getStrapiImageUrl(aboutData.image) : null}
         achievements={
           "achievements" in about && Array.isArray(about.achievements)
             ? about.achievements.map((a: { text?: string } | string) =>

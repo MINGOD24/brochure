@@ -1,5 +1,6 @@
 // Strapi API integration
 // This file handles all communication with Strapi CMS
+// Updated for Strapi v5 flat response structure
 
 const STRAPI_URL =
   process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:1337";
@@ -19,116 +20,102 @@ interface StrapiResponse<T> {
 
 interface StrapiImage {
   id: number;
-  attributes: {
-    url: string;
-    alternativeText: string | null;
-    width: number;
-    height: number;
-    formats?: {
-      thumbnail?: { url: string };
-      small?: { url: string };
-      medium?: { url: string };
-      large?: { url: string };
-    };
+  url: string;
+  alternativeText: string | null;
+  width: number;
+  height: number;
+  formats?: {
+    thumbnail?: { url: string };
+    small?: { url: string };
+    medium?: { url: string };
+    large?: { url: string };
   };
 }
 
-// Types for Strapi content
+// Types for Strapi content (Strapi v5 flat structure)
 export interface HeroContent {
   id: number;
-  attributes: {
-    title: string;
-    subtitle: string;
-    description: string;
-    ctaText: string;
-    ctaLink: string;
-    backgroundImage?: { data: StrapiImage };
-  };
+  documentId: string;
+  title: string;
+  subtitle: string;
+  description: string;
+  ctaText: string;
+  ctaLink: string;
+  backgroundImage?: StrapiImage;
 }
 
 export interface MissionContent {
   id: number;
-  attributes: {
-    title: string;
-    description: string;
-    points: {
-      id: number;
-      text: string;
-    }[];
-  };
+  documentId: string;
+  title: string;
+  description: string;
+  points: {
+    id: number;
+    text: string;
+  }[];
 }
 
 export interface Projection {
   id: number;
-  attributes: {
-    title: string;
-    description: string;
-    year: string;
-    order: number;
-  };
+  documentId: string;
+  title: string;
+  description: string;
+  year: string;
+  order: number;
 }
 
 export interface AboutContent {
   id: number;
-  attributes: {
-    name: string;
-    title: string;
-    bio: string;
-    image?: { data: StrapiImage };
-    achievements: {
-      id: number;
-      text: string;
-    }[];
-  };
+  documentId: string;
+  name: string;
+  title: string;
+  bio: string;
+  image?: StrapiImage;
+  achievements: {
+    id: number;
+    text: string;
+  }[];
 }
 
 export interface Course {
   id: number;
-  attributes: {
-    title: string;
-    description: string;
-    duration: string;
-    format: string;
-    image?: { data: StrapiImage };
-    order: number;
-  };
+  documentId: string;
+  title: string;
+  description: string;
+  duration: string;
+  format: string;
+  image?: StrapiImage;
+  order: number;
 }
 
 export interface ContactInfo {
   id: number;
-  attributes: {
-    email: string;
-    phone?: string;
-    address?: string;
-    partnershipTitle: string;
-    partnershipDescription: string;
-  };
+  documentId: string;
+  email: string;
+  phone?: string;
+  address?: string;
+  partnershipTitle: string;
+  partnershipDescription: string;
 }
 
 export interface SiteSettings {
   id: number;
-  attributes: {
-    siteName: string;
-    logo?: { data: StrapiImage };
-    footerText: string;
-    socialLinks?: {
-      id: number;
-      platform: string;
-      url: string;
-    }[];
-  };
+  documentId: string;
+  siteName: string;
+  logo?: StrapiImage;
+  footerText: string;
+  socialLinks?: {
+    id: number;
+    platform: string;
+    url: string;
+  }[];
 }
 
-// Helper to get full image URL
-export function getStrapiImageUrl(
-  image?: StrapiImage | { data: StrapiImage | null }
-): string | null {
+// Helper to get full image URL (Strapi v5 format)
+export function getStrapiImageUrl(image?: StrapiImage | null): string | null {
   if (!image) return null;
 
-  const imageData = "data" in image ? image.data : image;
-  if (!imageData) return null;
-
-  const url = imageData.attributes.url;
+  const url = image.url;
 
   // If URL is already absolute, return it
   if (url.startsWith("http")) return url;
@@ -219,7 +206,7 @@ export async function getContactInfo(): Promise<ContactInfo | null> {
 
 export async function getSiteSettings(): Promise<SiteSettings | null> {
   const response = await fetchStrapi<StrapiResponse<SiteSettings>>(
-    "/site-setting?populate=*"
+    "/global?populate=*"
   );
   return response?.data || null;
 }
