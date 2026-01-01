@@ -196,6 +196,28 @@ Without Strapi, edit default content in:
 
 With Strapi, manage content through the Strapi admin panel.
 
+### Image Domains
+
+To allow images from additional domains, update `next.config.js`:
+
+```javascript
+images: {
+  remotePatterns: [
+    {
+      protocol: 'https',
+      hostname: 'your-custom-domain.com',
+    },
+  ],
+}
+```
+
+Pre-configured domains include:
+- Unsplash (for placeholder images)
+- Strapi Cloud (*.strapi.io)
+- Railway (*.railway.app)
+- DigitalOcean Spaces (*.digitaloceanspaces.com)
+- Localhost (for development)
+
 ## Scripts
 
 ```bash
