@@ -23,21 +23,28 @@ export const revalidate = 60; // Revalidate every 60 seconds
 
 export default async function Home() {
   // Fetch all content from Strapi (with fallbacks)
-  const [heroData, missionData, projectionsData, coursesData, aboutData, contactData, siteSettings] = 
-    await Promise.all([
-      getHeroContent().catch(() => null),
-      getMissionContent().catch(() => null),
-      getProjections().catch(() => []),
-      getCourses().catch(() => []),
-      getAboutContent().catch(() => null),
-      getContactInfo().catch(() => null),
-      getSiteSettings().catch(() => null),
-    ]);
+  const [
+    heroData,
+    missionData,
+    projectionsData,
+    coursesData,
+    aboutData,
+    contactData,
+    siteSettings,
+  ] = await Promise.all([
+    getHeroContent().catch(() => null),
+    getMissionContent().catch(() => null),
+    getProjections().catch(() => []),
+    getCourses().catch(() => []),
+    getAboutContent().catch(() => null),
+    getContactInfo().catch(() => null),
+    getSiteSettings().catch(() => null),
+  ]);
 
   // Use Strapi data or fallback content (Strapi v5 flat structure)
   const hero = heroData || fallbackContent.hero;
   const mission = missionData || fallbackContent.mission;
-  
+
   // Safely map projections with validation
   const projections =
     projectionsData && projectionsData.length > 0
@@ -52,7 +59,8 @@ export default async function Home() {
       : fallbackContent.projections;
 
   // Use fallback if mapping resulted in empty array
-  const finalProjections = projections.length > 0 ? projections : fallbackContent.projections;
+  const finalProjections =
+    projections.length > 0 ? projections : fallbackContent.projections;
 
   // Safely map courses with validation
   const courses =
@@ -70,7 +78,10 @@ export default async function Home() {
       : fallbackContent.courses.map((c) => ({ ...c, imageUrl: null }));
 
   // Use fallback if mapping resulted in empty array
-  const finalCourses = courses.length > 0 ? courses : fallbackContent.courses.map((c) => ({ ...c, imageUrl: null }));
+  const finalCourses =
+    courses.length > 0
+      ? courses
+      : fallbackContent.courses.map((c) => ({ ...c, imageUrl: null }));
 
   const about = aboutData || fallbackContent.about;
   const contact = contactData || fallbackContent.contact;

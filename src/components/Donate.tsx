@@ -16,7 +16,10 @@ export default function Donate() {
 
   if (showSuccess) {
     return (
-      <section id="donate" className="py-24 bg-gradient-to-b from-cream to-white">
+      <section
+        id="donate"
+        className="py-24 bg-gradient-to-b from-cream to-white"
+      >
         <div className="container mx-auto px-6">
           <div className="max-w-2xl mx-auto text-center">
             <div className="bg-green-50 border border-green-200 rounded-2xl p-12">
