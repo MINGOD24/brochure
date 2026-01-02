@@ -4,6 +4,7 @@ import Mission from "@/components/Mission";
 import Projections from "@/components/Projections";
 import Courses from "@/components/Courses";
 import About from "@/components/About";
+import News from "@/components/News";
 import Donate from "@/components/Donate";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
@@ -16,6 +17,7 @@ import {
   getAboutContent,
   getContactInfo,
   getSiteSettings,
+  getNews,
   getStrapiImageUrl,
 } from "@/lib/strapi";
 
@@ -29,6 +31,7 @@ export default async function Home() {
     projectionsData,
     coursesData,
     aboutData,
+    newsData,
     contactData,
     siteSettings,
   ] = await Promise.all([
@@ -37,6 +40,7 @@ export default async function Home() {
     getProjections().catch(() => []),
     getCourses().catch(() => []),
     getAboutContent().catch(() => null),
+    getNews().catch(() => []),
     getContactInfo().catch(() => null),
     getSiteSettings().catch(() => null),
   ]);
@@ -87,6 +91,23 @@ export default async function Home() {
   const contact = contactData || fallbackContent.contact;
   const settings = siteSettings || fallbackContent.siteSettings;
 
+  // Safely map news with validation
+  const news =
+    newsData && newsData.length > 0
+      ? newsData
+          .filter((n) => n && n.title) // Filter out invalid entries
+          .map((n) => ({
+            id: n.id,
+            title: n.title,
+            source: n.source || "",
+            url: n.url || "",
+            publishedAt: n.publishedAt || "",
+            excerpt: n.excerpt,
+          }))
+      : fallbackContent.news;
+
+  const finalNews = news.length > 0 ? news : fallbackContent.news;
+
   return (
     <main className="min-h-screen">
       <Header
@@ -134,6 +155,8 @@ export default async function Home() {
             : fallbackContent.about.achievements
         }
       />
+
+      <News articles={finalNews} />
 
       <Donate />
 

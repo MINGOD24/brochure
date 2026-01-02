@@ -111,6 +111,17 @@ export interface SiteSettings {
   }[];
 }
 
+export interface NewsArticle {
+  id: number;
+  documentId: string;
+  title: string;
+  source: string;
+  url: string;
+  publishedAt: string;
+  excerpt?: string;
+  image?: StrapiImage;
+}
+
 // Helper to get full image URL (Strapi v5 format)
 export function getStrapiImageUrl(image?: StrapiImage | null): string | null {
   if (!image) return null;
@@ -209,6 +220,13 @@ export async function getSiteSettings(): Promise<SiteSettings | null> {
     "/global?populate=*"
   );
   return response?.data || null;
+}
+
+export async function getNews(): Promise<NewsArticle[]> {
+  const response = await fetchStrapi<StrapiResponse<NewsArticle[]>>(
+    "/news-articles?populate=*&sort=publishedAt:desc"
+  );
+  return response?.data || [];
 }
 
 // Fallback content when Strapi is not available
@@ -321,4 +339,30 @@ export const fallbackContent = {
     footerText:
       "© 2025 Jewish Heritage Education and Advocacy Center. All rights reserved.",
   },
+  news: [
+    {
+      id: 1,
+      title: "Dalia Pollak: Pioneering Jewish Education in Chile's Museum Space",
+      source: "Vin News",
+      url: "https://vinnews.com/2024/07/29/dalia-pollak-pioneering-jewish-education-in-chile-s-museum-space/",
+      publishedAt: "2024-07-29",
+      excerpt: "An in-depth look at how Dalia Pollak is transforming Jewish education through innovative museum experiences.",
+    },
+    {
+      id: 2,
+      title: "The Untold Stories: How Jewish Advocate Dalia Pollak Is Leading the Fight Against Modern-Day Anti-Semitism",
+      source: "Matzav",
+      url: "https://matzav.com/the-untold-stories-how-jewish-advocate-dalia-pollak-is-leading-the-fight-against-modern-day-anti-semitism/",
+      publishedAt: "2024-08-15",
+      excerpt: "Discover the untold stories behind Dalia Pollak's advocacy work combating antisemitism worldwide.",
+    },
+    {
+      id: 3,
+      title: "Preserving Memory: Meet Dalia Pollak, The Expert Safeguarding Jewish Cultural Heritage For Future Generations",
+      source: "Vents Magazine",
+      url: "https://ventsmagazine.com/2024/09/14/preserving-memory-meet-dalia-pollak-the-expert-safeguarding-jewish-cultural-heritage-for-future-generations/",
+      publishedAt: "2024-09-14",
+      excerpt: "Meet the expert dedicated to preserving Jewish cultural heritage and memory for future generations.",
+    },
+  ],
 };
