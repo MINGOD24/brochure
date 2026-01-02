@@ -17,6 +17,18 @@ const nextConfig: NextConfig = {
         hostname: "localhost",
         port: "1337",
       },
+      {
+        protocol: "https",
+        hostname: "vinnews.com",
+      },
+      {
+        protocol: "https",
+        hostname: "matzav.com",
+      },
+      {
+        protocol: "https",
+        hostname: "ventsmagazine.com",
+      },
     ],
   },
   // Ensure proper headers for Strapi

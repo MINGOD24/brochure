@@ -12,16 +12,27 @@ interface NewsProps {
   articles: NewsArticle[];
 }
 
-// Source logo/icon mapping
-const sourceIcons: Record<string, { bg: string; text: string }> = {
-  "Vin News": { bg: "bg-blue-600", text: "VN" },
-  Matzav: { bg: "bg-emerald-600", text: "M" },
-  "Vents Magazine": { bg: "bg-purple-600", text: "V" },
-  default: { bg: "bg-gray-600", text: "📰" },
+// Source logo/icon mapping with direct URLs from sources
+const sourceLogos: Record<string, { logo: string; bg: string; text: string }> = {
+  "Vin News": {
+    logo: "https://vinnews.com/wp-content/uploads/2020/04/vin-white-logo.png",
+    bg: "bg-[#1a365d]",
+    text: "VN",
+  },
+  Matzav: {
+    logo: "https://matzav.com/wp-content/uploads/2017/04/matzav-logo-300x53.png",
+    bg: "bg-white",
+    text: "M",
+  },
+  "Vents Magazine": {
+    logo: "https://ventsmagazine.com/wp-content/uploads/2024/09/ventsmagazinesmaller3-1-1024x413-1-e1727540406311.png",
+    bg: "bg-white",
+    text: "V",
+  },
 };
 
-function getSourceStyle(source: string) {
-  return sourceIcons[source] || sourceIcons.default;
+function getSourceInfo(source: string) {
+  return sourceLogos[source] || { logo: null, bg: "bg-gray-600", text: "📰" };
 }
 
 function formatDate(dateString: string) {
@@ -65,7 +76,9 @@ export default function News({ articles }: NewsProps) {
         {/* News Grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {articles.map((article) => {
-            const sourceStyle = getSourceStyle(article.source);
+            const sourceInfo = getSourceInfo(article.source);
+            // Use Strapi image if available, otherwise use source logo
+            const logoUrl = article.imageUrl || sourceInfo.logo;
 
             return (
               <a
@@ -78,19 +91,19 @@ export default function News({ articles }: NewsProps) {
                 {/* Header with Source */}
                 <div className="p-6 pb-4 border-b border-gray-100">
                   <div className="flex items-center gap-3">
-                    {article.imageUrl ? (
-                      <div className="w-12 h-12 rounded-xl overflow-hidden shadow-lg bg-gray-100 flex items-center justify-center">
+                    {logoUrl ? (
+                      <div className={`w-12 h-12 rounded-xl overflow-hidden shadow-lg ${sourceInfo.bg} flex items-center justify-center p-1`}>
                         <img
-                          src={article.imageUrl}
+                          src={logoUrl}
                           alt={article.source}
                           className="w-full h-full object-contain"
                         />
                       </div>
                     ) : (
                       <div
-                        className={`w-12 h-12 rounded-xl ${sourceStyle.bg} flex items-center justify-center text-white font-bold text-lg shadow-lg`}
+                        className={`w-12 h-12 rounded-xl ${sourceInfo.bg} flex items-center justify-center text-white font-bold text-lg shadow-lg`}
                       >
-                        {sourceStyle.text}
+                        {sourceInfo.text}
                       </div>
                     )}
                     <div>
