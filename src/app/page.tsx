@@ -103,10 +103,14 @@ export default async function Home() {
             url: n.url || "",
             publishedAt: n.publishedAt || "",
             excerpt: n.excerpt,
+            imageUrl: getStrapiImageUrl(n.image),
           }))
-      : fallbackContent.news;
+      : fallbackContent.news.map((n) => ({ ...n, imageUrl: null }));
 
-  const finalNews = news.length > 0 ? news : fallbackContent.news;
+  const finalNews =
+    news.length > 0
+      ? news
+      : fallbackContent.news.map((n) => ({ ...n, imageUrl: null }));
 
   return (
     <main className="min-h-screen">

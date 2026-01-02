@@ -5,6 +5,7 @@ interface NewsArticle {
   url: string;
   publishedAt: string;
   excerpt?: string;
+  imageUrl?: string | null;
 }
 
 interface NewsProps {
@@ -14,7 +15,7 @@ interface NewsProps {
 // Source logo/icon mapping
 const sourceIcons: Record<string, { bg: string; text: string }> = {
   "Vin News": { bg: "bg-blue-600", text: "VN" },
-  "Matzav": { bg: "bg-emerald-600", text: "M" },
+  Matzav: { bg: "bg-emerald-600", text: "M" },
   "Vents Magazine": { bg: "bg-purple-600", text: "V" },
   default: { bg: "bg-gray-600", text: "📰" },
 };
@@ -65,7 +66,7 @@ export default function News({ articles }: NewsProps) {
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {articles.map((article) => {
             const sourceStyle = getSourceStyle(article.source);
-            
+
             return (
               <a
                 key={article.id}
@@ -77,9 +78,21 @@ export default function News({ articles }: NewsProps) {
                 {/* Header with Source */}
                 <div className="p-6 pb-4 border-b border-gray-100">
                   <div className="flex items-center gap-3">
-                    <div className={`w-12 h-12 rounded-xl ${sourceStyle.bg} flex items-center justify-center text-white font-bold text-lg shadow-lg`}>
-                      {sourceStyle.text}
-                    </div>
+                    {article.imageUrl ? (
+                      <div className="w-12 h-12 rounded-xl overflow-hidden shadow-lg bg-gray-100 flex items-center justify-center">
+                        <img
+                          src={article.imageUrl}
+                          alt={article.source}
+                          className="w-full h-full object-contain"
+                        />
+                      </div>
+                    ) : (
+                      <div
+                        className={`w-12 h-12 rounded-xl ${sourceStyle.bg} flex items-center justify-center text-white font-bold text-lg shadow-lg`}
+                      >
+                        {sourceStyle.text}
+                      </div>
+                    )}
                     <div>
                       <p className="font-semibold text-[var(--color-navy)]">
                         {article.source}
@@ -139,4 +152,3 @@ export default function News({ articles }: NewsProps) {
     </section>
   );
 }
-
