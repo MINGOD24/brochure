@@ -154,6 +154,7 @@ export default function Donate() {
 
               {activeAmount ? (
                 <PaymentForm
+                  key={activeAmount}
                   presetAmount={activeAmount}
                   description="JHEAC Donation"
                   onSuccess={(txId) => {
