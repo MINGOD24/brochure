@@ -26,22 +26,14 @@ export default function Footer({ siteName, footerText, email }: FooterProps) {
           <div className="lg:col-span-2">
             <div className="flex items-center gap-3 mb-6">
               {/* Logo */}
-              <div className="relative w-10 h-10">
+              <div className="relative">
                 <Image
-                  src="/LOGO.svg"
+                  src="/LOGO2.svg"
                   alt={siteName}
-                  width={40}
-                  height={40}
-                  className="w-full h-full object-contain"
+                  width={200}
+                  height={200}
+                  className="object-contain"
                 />
-              </div>
-              <div className="flex flex-col">
-                <span className="text-[var(--color-white)] font-bold text-lg tracking-wider">
-                  JHEA
-                </span>
-                <span className="text-[var(--color-cream)]/60 text-[10px] tracking-widest uppercase">
-                  Jewish Heritage Education
-                </span>
               </div>
             </div>
 

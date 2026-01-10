@@ -95,10 +95,10 @@ export default function Mission({ title, description, points }: MissionProps) {
               <div className="relative z-10 text-center">
                 <div className="mb-8">
                   <Image
-                    src="/LOGO.svg"
+                    src="/LOGO2.svg"
                     alt=""
-                    width={80}
-                    height={80}
+                    width={200}
+                    height={200}
                     className="mx-auto object-contain"
                   />
                 </div>

@@ -22,10 +22,10 @@ export default function DonatePage() {
           <Link href="/" className="flex items-center gap-3">
             <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center">
               <Image
-                src="/LOGO.svg"
+                src="/LOGO2.svg"
                 alt="JHEA"
-                width={40}
-                height={40}
+                width={200}
+                height={200}
                 className="object-contain"
               />
             </div>

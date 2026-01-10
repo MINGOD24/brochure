@@ -51,11 +51,11 @@ export default function Header({ siteName = "JHEA", logoUrl }: HeaderProps) {
           ) : (
             <div className="relative shrink-0 h-12 flex items-center">
               <Image
-                src="/LOGO.svg"
+                src="/LOGO2.svg"
                 alt={siteName}
-                width={300}
+                width={200}
                 height={48}
-                className="w-[300px] h-auto object-contain"
+                className="w-[200px] h-auto object-contain"
                 priority
                 unoptimized
               />

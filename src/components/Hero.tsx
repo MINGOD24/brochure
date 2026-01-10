@@ -55,19 +55,19 @@ export default function Hero({
       {/* Decorative Elements */}
       <div className="absolute top-20 left-10 opacity-10">
         <Image
-          src="/LOGO.svg"
+          src="/LOGO2.svg"
           alt=""
-          width={192}
-          height={192}
+          width={200}
+          height={200}
           className="object-contain"
         />
       </div>
       <div className="absolute bottom-20 right-10 opacity-10">
         <Image
-          src="/LOGO.svg"
+          src="/LOGO2.svg"
           alt=""
-          width={144}
-          height={144}
+          width={200}
+          height={200}
           className="object-contain"
         />
       </div>
