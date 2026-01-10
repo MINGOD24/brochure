@@ -41,16 +41,16 @@ export default function About({
           {/* Image Column */}
           <div className="relative">
             <div className="relative rounded-lg overflow-hidden">
-              {imageUrl ? (
-                <img
-                  src={imageUrl}
-                  alt={name}
-                  className="w-full h-auto object-cover"
-                />
-              ) : (
-                <div className="aspect-[4/5] bg-[var(--color-navy-light)] flex items-center justify-center">
-                  <div className="text-center">
-                    <div className="w-32 h-32 mx-auto mb-6 rounded-full bg-[var(--color-white)]/20 flex items-center justify-center">
+              <div className="aspect-[4/5] bg-[var(--color-navy-light)] flex items-center justify-center">
+                <div className="text-center">
+                  <div className="w-32 h-32 mx-auto mb-6 rounded-full bg-[var(--color-white)]/20 flex items-center justify-center overflow-hidden">
+                    {imageUrl ? (
+                      <img
+                        src={imageUrl}
+                        alt={name}
+                        className="w-full h-full object-cover object-top rounded-full"
+                      />
+                    ) : (
                       <svg
                         className="w-16 h-16 text-[var(--color-white)]"
                         fill="none"
@@ -64,16 +64,16 @@ export default function About({
                           d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
                         />
                       </svg>
-                    </div>
-                    <p className="text-[var(--color-cream)] text-2xl font-semibold">
-                      {name}
-                    </p>
-                    <p className="text-[var(--color-white)] uppercase tracking-wider text-sm mt-2 font-bold">
-                      {title}
-                    </p>
+                    )}
                   </div>
+                  <p className="text-[var(--color-cream)] text-2xl font-semibold">
+                    {name}
+                  </p>
+                  <p className="text-[var(--color-white)] uppercase tracking-wider text-sm mt-2 font-bold">
+                    {title}
+                  </p>
                 </div>
-              )}
+              </div>
 
               {/* Decorative frame */}
               <div className="absolute -top-4 -left-4 w-full h-full border-2 border-[var(--color-white)]/30 rounded-lg pointer-events-none" />
