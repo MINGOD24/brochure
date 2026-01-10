@@ -1,6 +1,22 @@
 import Link from "next/link";
 import Image from "next/image";
 
+// Helper function to parse markdown bold (**text**) to React elements
+function parseMarkdown(text: string) {
+  const parts = text.split(/(\*\*.*?\*\*)/g);
+  return parts.map((part, index) => {
+    if (part.startsWith("**") && part.endsWith("**")) {
+      const boldText = part.slice(2, -2);
+      return (
+        <strong key={index} className="font-bold">
+          {boldText}
+        </strong>
+      );
+    }
+    return <span key={index}>{part}</span>;
+  });
+}
+
 interface HeroProps {
   title: string;
   subtitle: string;
@@ -99,7 +115,7 @@ export default function Hero({
           className="text-lg md:text-xl text-[var(--color-cream)]/80 max-w-3xl mx-auto mb-12 leading-relaxed animate-fade-in-up opacity-0"
           style={{ animationDelay: "0.4s", animationFillMode: "forwards" }}
         >
-          {description}
+          {parseMarkdown(description)}
         </p>
 
         {/* CTA Buttons */}
