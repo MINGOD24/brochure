@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 interface MissionProps {
   title: string;
   description: string;
@@ -8,7 +10,7 @@ export default function Mission({ title, description, points }: MissionProps) {
   return (
     <section id="mission" className="py-24 bg-cream relative overflow-hidden">
       {/* Decorative background elements */}
-      <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[var(--color-gold)] to-transparent opacity-30" />
+      <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[var(--color-white)] to-transparent opacity-30" />
 
       <div className="max-w-7xl mx-auto px-6">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
@@ -16,8 +18,8 @@ export default function Mission({ title, description, points }: MissionProps) {
           <div>
             {/* Section Label */}
             <div className="flex items-center gap-4 mb-6">
-              <div className="h-px w-12 bg-[var(--color-gold)]" />
-              <span className="text-[var(--color-gold)] uppercase tracking-[0.2em] text-sm font-medium">
+              <div className="h-px w-12 bg-[var(--color-white)]" />
+              <span className="text-[var(--color-white)] uppercase tracking-[0.2em] text-sm font-medium font-bold">
                 Our Purpose
               </span>
             </div>
@@ -38,7 +40,7 @@ export default function Mission({ title, description, points }: MissionProps) {
                 <li key={index} className="flex items-start gap-4">
                   <div className="flex-shrink-0 w-8 h-8 rounded-full bg-[var(--color-navy)] flex items-center justify-center mt-0.5">
                     <svg
-                      className="w-4 h-4 text-[var(--color-gold)]"
+                      className="w-4 h-4 text-[var(--color-white)]"
                       fill="currentColor"
                       viewBox="0 0 20 20"
                     >
@@ -78,7 +80,7 @@ export default function Mission({ title, description, points }: MissionProps) {
                   >
                     <polygon
                       points="10,1 12,7 19,7 14,11 16,18 10,14 4,18 6,11 1,7 8,7"
-                      fill="var(--color-gold)"
+                      fill="var(--color-white)"
                     />
                   </pattern>
                   <rect
@@ -92,36 +94,35 @@ export default function Mission({ title, description, points }: MissionProps) {
               {/* Content */}
               <div className="relative z-10 text-center">
                 <div className="mb-8">
-                  <svg className="w-20 h-20 mx-auto" viewBox="0 0 100 100">
-                    <polygon
-                      points="50,5 61,35 95,35 68,55 79,90 50,70 21,90 32,55 5,35 39,35"
-                      fill="none"
-                      stroke="var(--color-gold)"
-                      strokeWidth="2"
-                    />
-                  </svg>
+                  <Image
+                    src="/LOGO.svg"
+                    alt=""
+                    width={80}
+                    height={80}
+                    className="mx-auto object-contain"
+                  />
                 </div>
 
-                <blockquote className="text-2xl md:text-3xl text-[var(--color-cream)] font-serif italic mb-6">
+                <blockquote className="text-2xl md:text-3xl text-[var(--color-cream)] italic mb-6">
                   &ldquo;Bringing memory to life through education&rdquo;
                 </blockquote>
 
                 <div className="separator-gold w-24 mx-auto mb-6" />
 
-                <p className="text-[var(--color-gold)] uppercase tracking-widest text-sm">
+                <p className="text-[var(--color-white)] uppercase tracking-widest text-sm font-bold">
                   Since 2020
                 </p>
               </div>
 
               {/* Corner decorations */}
-              <div className="absolute top-4 left-4 w-8 h-8 border-l-2 border-t-2 border-[var(--color-gold)]/30" />
-              <div className="absolute top-4 right-4 w-8 h-8 border-r-2 border-t-2 border-[var(--color-gold)]/30" />
-              <div className="absolute bottom-4 left-4 w-8 h-8 border-l-2 border-b-2 border-[var(--color-gold)]/30" />
-              <div className="absolute bottom-4 right-4 w-8 h-8 border-r-2 border-b-2 border-[var(--color-gold)]/30" />
+              <div className="absolute top-4 left-4 w-8 h-8 border-l-2 border-t-2 border-[var(--color-white)]/30" />
+              <div className="absolute top-4 right-4 w-8 h-8 border-r-2 border-t-2 border-[var(--color-white)]/30" />
+              <div className="absolute bottom-4 left-4 w-8 h-8 border-l-2 border-b-2 border-[var(--color-white)]/30" />
+              <div className="absolute bottom-4 right-4 w-8 h-8 border-r-2 border-b-2 border-[var(--color-white)]/30" />
             </div>
 
             {/* Offset decorative element */}
-            <div className="absolute -bottom-6 -right-6 w-48 h-48 bg-[var(--color-gold)]/10 rounded-lg -z-10" />
+            <div className="absolute -bottom-6 -right-6 w-48 h-48 bg-[var(--color-white)]/10 rounded-lg -z-10" />
           </div>
         </div>
       </div>

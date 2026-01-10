@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import PaymentForm from "@/components/PaymentForm";
 
 const presetAmounts = [25, 50, 100, 250, 500, 1000];
@@ -19,11 +20,17 @@ export default function DonatePage() {
       <header className="bg-navy text-white py-4">
         <div className="container mx-auto px-6 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-gold/20 rounded-full flex items-center justify-center">
-              <span className="text-gold text-xl">✡</span>
+            <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center">
+              <Image
+                src="/LOGO.svg"
+                alt="JHEA"
+                width={40}
+                height={40}
+                className="object-contain"
+              />
             </div>
             <div>
-              <div className="font-bold text-lg">JHEAC</div>
+              <div className="font-bold text-lg">JHEA</div>
               <div className="text-xs text-gray-300">
                 Jewish Heritage Education
               </div>
@@ -31,7 +38,7 @@ export default function DonatePage() {
           </Link>
           <Link
             href="/"
-            className="text-sm text-gold hover:text-gold/80 transition-colors"
+            className="text-sm text-white hover:text-white/80 transition-colors"
           >
             ← Back to Home
           </Link>
@@ -42,7 +49,7 @@ export default function DonatePage() {
         <div className="max-w-4xl mx-auto">
           {/* Hero Section */}
           <div className="text-center mb-12">
-            <h1 className="text-4xl md:text-5xl font-serif text-navy mb-4">
+            <h1 className="text-4xl md:text-5xl text-navy mb-4">
               Support Our Mission
             </h1>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
@@ -96,7 +103,7 @@ export default function DonatePage() {
                     }}
                     placeholder="Enter amount"
                     min="1"
-                    className="w-full pl-10 pr-4 py-4 text-lg border-2 border-gray-200 rounded-lg focus:border-gold focus:ring-0 transition-colors"
+                    className="w-full pl-10 pr-4 py-4 text-lg border-2 border-gray-200 rounded-lg focus:border-[var(--color-navy)] focus:ring-0 transition-colors"
                   />
                 </div>
               </div>
@@ -106,21 +113,29 @@ export default function DonatePage() {
                 <h3 className="font-semibold text-navy mb-3">Your Impact</h3>
                 <ul className="space-y-2 text-sm text-gray-600">
                   <li className="flex items-start gap-2">
-                    <span className="text-gold mt-0.5">✓</span>
+                    <span className="text-[var(--color-navy)] mt-0.5 font-bold">
+                      ✓
+                    </span>
                     <span>
                       $25 - Provides educational materials for 5 students
                     </span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <span className="text-gold mt-0.5">✓</span>
+                    <span className="text-[var(--color-navy)] mt-0.5 font-bold">
+                      ✓
+                    </span>
                     <span>$100 - Sponsors a community workshop session</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <span className="text-gold mt-0.5">✓</span>
+                    <span className="text-[var(--color-navy)] mt-0.5 font-bold">
+                      ✓
+                    </span>
                     <span>$500 - Supports a traveling exhibition</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <span className="text-gold mt-0.5">✓</span>
+                    <span className="text-[var(--color-navy)] mt-0.5 font-bold">
+                      ✓
+                    </span>
                     <span>$1000 - Funds a full educator training program</span>
                   </li>
                 </ul>
@@ -136,7 +151,7 @@ export default function DonatePage() {
               {activeAmount ? (
                 <PaymentForm
                   presetAmount={activeAmount}
-                  description="JHEAC Donation"
+                  description="JHEA Donation"
                   onSuccess={(txId) => {
                     console.log("Payment successful:", txId);
                   }}

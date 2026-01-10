@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 
 interface FooterProps {
   siteName: string;
@@ -26,18 +27,17 @@ export default function Footer({ siteName, footerText, email }: FooterProps) {
             <div className="flex items-center gap-3 mb-6">
               {/* Logo */}
               <div className="relative w-10 h-10">
-                <svg viewBox="0 0 100 100" className="w-full h-full">
-                  <polygon
-                    points="50,5 61,35 95,35 68,55 79,90 50,70 21,90 32,55 5,35 39,35"
-                    fill="none"
-                    stroke="var(--color-gold)"
-                    strokeWidth="3"
-                  />
-                </svg>
+                <Image
+                  src="/LOGO.svg"
+                  alt={siteName}
+                  width={40}
+                  height={40}
+                  className="w-full h-full object-contain"
+                />
               </div>
               <div className="flex flex-col">
-                <span className="text-[var(--color-gold)] font-bold text-lg tracking-wider">
-                  JHEAC
+                <span className="text-[var(--color-white)] font-bold text-lg tracking-wider">
+                  JHEA
                 </span>
                 <span className="text-[var(--color-cream)]/60 text-[10px] tracking-widest uppercase">
                   Jewish Heritage Education
@@ -55,7 +55,7 @@ export default function Footer({ siteName, footerText, email }: FooterProps) {
             <div className="flex items-center gap-4">
               <a
                 href="#"
-                className="w-10 h-10 rounded-full border border-[var(--color-gold)]/30 flex items-center justify-center text-[var(--color-gold)] hover:bg-[var(--color-gold)] hover:text-[var(--color-navy)] transition-all"
+                className="w-10 h-10 rounded-full border border-[var(--color-white)]/30 flex items-center justify-center text-[var(--color-white)] hover:bg-[var(--color-white)] hover:text-[var(--color-navy)] transition-all"
               >
                 <svg
                   className="w-5 h-5"
@@ -67,7 +67,7 @@ export default function Footer({ siteName, footerText, email }: FooterProps) {
               </a>
               <a
                 href="#"
-                className="w-10 h-10 rounded-full border border-[var(--color-gold)]/30 flex items-center justify-center text-[var(--color-gold)] hover:bg-[var(--color-gold)] hover:text-[var(--color-navy)] transition-all"
+                className="w-10 h-10 rounded-full border border-[var(--color-white)]/30 flex items-center justify-center text-[var(--color-white)] hover:bg-[var(--color-white)] hover:text-[var(--color-navy)] transition-all"
               >
                 <svg
                   className="w-5 h-5"
@@ -79,7 +79,7 @@ export default function Footer({ siteName, footerText, email }: FooterProps) {
               </a>
               <a
                 href="#"
-                className="w-10 h-10 rounded-full border border-[var(--color-gold)]/30 flex items-center justify-center text-[var(--color-gold)] hover:bg-[var(--color-gold)] hover:text-[var(--color-navy)] transition-all"
+                className="w-10 h-10 rounded-full border border-[var(--color-white)]/30 flex items-center justify-center text-[var(--color-white)] hover:bg-[var(--color-white)] hover:text-[var(--color-navy)] transition-all"
               >
                 <svg
                   className="w-5 h-5"
@@ -94,7 +94,7 @@ export default function Footer({ siteName, footerText, email }: FooterProps) {
 
           {/* Quick Links */}
           <div>
-            <h4 className="text-[var(--color-gold)] uppercase tracking-wider text-sm font-medium mb-6">
+            <h4 className="text-[var(--color-white)] uppercase tracking-wider text-sm font-medium mb-6">
               Quick Links
             </h4>
             <ul className="space-y-3">
@@ -102,7 +102,7 @@ export default function Footer({ siteName, footerText, email }: FooterProps) {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-[var(--color-cream)]/70 hover:text-[var(--color-gold)] transition-colors"
+                    className="text-[var(--color-cream)]/70 hover:text-[var(--color-white)] transition-colors"
                   >
                     {link.label}
                   </Link>
@@ -113,7 +113,7 @@ export default function Footer({ siteName, footerText, email }: FooterProps) {
 
           {/* Contact */}
           <div>
-            <h4 className="text-[var(--color-gold)] uppercase tracking-wider text-sm font-medium mb-6">
+            <h4 className="text-[var(--color-white)] uppercase tracking-wider text-sm font-medium mb-6">
               Contact Us
             </h4>
             <ul className="space-y-4">
@@ -121,7 +121,7 @@ export default function Footer({ siteName, footerText, email }: FooterProps) {
                 <li>
                   <a
                     href={`mailto:${email}`}
-                    className="text-[var(--color-cream)]/70 hover:text-[var(--color-gold)] transition-colors flex items-center gap-2"
+                    className="text-[var(--color-cream)]/70 hover:text-[var(--color-white)] transition-colors flex items-center gap-2"
                   >
                     <svg
                       className="w-4 h-4"
@@ -167,7 +167,7 @@ export default function Footer({ siteName, footerText, email }: FooterProps) {
         </div>
 
         {/* Bottom Bar */}
-        <div className="border-t border-[var(--color-gold)]/20 pt-8">
+        <div className="border-t border-[var(--color-white)]/20 pt-8">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <p className="text-[var(--color-cream)]/60 text-sm">
               © {currentYear} {siteName}. All rights reserved.
@@ -175,13 +175,13 @@ export default function Footer({ siteName, footerText, email }: FooterProps) {
             <div className="flex items-center gap-6 text-sm">
               <Link
                 href="#"
-                className="text-[var(--color-cream)]/60 hover:text-[var(--color-gold)] transition-colors"
+                className="text-[var(--color-cream)]/60 hover:text-[var(--color-white)] transition-colors"
               >
                 Privacy Policy
               </Link>
               <Link
                 href="#"
-                className="text-[var(--color-cream)]/60 hover:text-[var(--color-gold)] transition-colors"
+                className="text-[var(--color-cream)]/60 hover:text-[var(--color-white)] transition-colors"
               >
                 Terms of Use
               </Link>

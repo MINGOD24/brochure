@@ -38,14 +38,14 @@ export default function Contact({
   return (
     <section id="contact" className="py-24 bg-cream relative overflow-hidden">
       {/* Top border */}
-      <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[var(--color-gold)] to-transparent opacity-30" />
+      <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[var(--color-white)] to-transparent opacity-30" />
 
       <div className="max-w-7xl mx-auto px-6">
         {/* Section Header */}
         <div className="text-center mb-16">
           <div className="flex items-center justify-center gap-4 mb-6">
-            <div className="h-px w-12 bg-[var(--color-gold)]" />
-            <span className="text-[var(--color-gold)] uppercase tracking-[0.2em] text-sm font-medium">
+            <div className="h-px w-12 bg-[var(--color-white)]" />
+            <span className="text-[var(--color-white)] uppercase tracking-[0.2em] text-sm font-medium font-bold">
               Get Involved
             </span>
             <div className="h-px w-12 bg-[var(--color-gold)]" />
@@ -80,7 +80,7 @@ export default function Contact({
                     type="text"
                     id="name"
                     required
-                    className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[var(--color-gold)] focus:border-transparent outline-none transition-all"
+                    className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[var(--color-navy)] focus:border-transparent outline-none transition-all"
                     placeholder="John Doe"
                     value={formData.name}
                     onChange={(e) =>
@@ -100,7 +100,7 @@ export default function Contact({
                     type="email"
                     id="email"
                     required
-                    className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[var(--color-gold)] focus:border-transparent outline-none transition-all"
+                    className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[var(--color-navy)] focus:border-transparent outline-none transition-all"
                     placeholder="john@example.com"
                     value={formData.email}
                     onChange={(e) =>
@@ -191,9 +191,9 @@ export default function Contact({
 
               <div className="space-y-6">
                 <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 rounded-full bg-[var(--color-gold)]/20 flex items-center justify-center flex-shrink-0">
+                  <div className="w-12 h-12 rounded-full bg-[var(--color-white)]/20 flex items-center justify-center flex-shrink-0">
                     <svg
-                      className="w-6 h-6 text-[var(--color-gold)]"
+                      className="w-6 h-6 text-[var(--color-white)]"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -207,12 +207,12 @@ export default function Contact({
                     </svg>
                   </div>
                   <div>
-                    <p className="text-[var(--color-gold)] uppercase tracking-wider text-xs mb-1">
+                    <p className="text-[var(--color-white)] uppercase tracking-wider text-xs mb-1 font-bold">
                       Email
                     </p>
                     <a
                       href={`mailto:${email}`}
-                      className="text-lg hover:text-[var(--color-gold)] transition-colors"
+                      className="text-lg hover:text-[var(--color-white)] transition-colors"
                     >
                       {email}
                     </a>
@@ -237,12 +237,12 @@ export default function Contact({
                       </svg>
                     </div>
                     <div>
-                      <p className="text-[var(--color-gold)] uppercase tracking-wider text-xs mb-1">
+                      <p className="text-[var(--color-white)] uppercase tracking-wider text-xs mb-1 font-bold">
                         Phone
                       </p>
                       <a
                         href={`tel:${phone}`}
-                        className="text-lg hover:text-[var(--color-gold)] transition-colors"
+                        className="text-lg hover:text-[var(--color-white)] transition-colors"
                       >
                         {phone}
                       </a>
@@ -274,7 +274,7 @@ export default function Contact({
                       </svg>
                     </div>
                     <div>
-                      <p className="text-[var(--color-gold)] uppercase tracking-wider text-xs mb-1">
+                      <p className="text-[var(--color-white)] uppercase tracking-wider text-xs mb-1 font-bold">
                         Location
                       </p>
                       <p className="text-lg">{address}</p>

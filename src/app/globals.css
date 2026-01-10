@@ -2,54 +2,19 @@
 
 :root {
   /* Primary colors from the brochure */
-  --color-navy: #1a2744;
-  --color-navy-light: #2a3a5c;
-  --color-gold: #c9a962;
-  --color-gold-light: #ddc58a;
+  --color-navy: #0000fe;
+  --color-navy-light: #1a1aff;
+  --color-gold: #ffffff;
+  --color-gold-light: #ffffff;
   --color-cream: #f8f6f0;
   --color-white: #ffffff;
   --color-text-dark: #1a1a1a;
   --color-text-muted: #4a5568;
 
-  /* Fonts */
-  --font-heading: "Cormorant Garamond", Georgia, serif;
-  --font-body: "Lato", "Segoe UI", sans-serif;
-}
-
-@font-face {
-  font-family: "Cormorant Garamond";
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url("https://fonts.gstatic.com/s/cormorantgaramond/v16/co3YmX5slCNuHLi8bLeY9MK7whWMhyjYqXtK.woff2")
-    format("woff2");
-}
-
-@font-face {
-  font-family: "Cormorant Garamond";
-  font-style: normal;
-  font-weight: 600;
-  font-display: swap;
-  src: url("https://fonts.gstatic.com/s/cormorantgaramond/v16/co3WmX5slCNuHLi8bLeY9MK7whWMhyjYpHtKky2F.woff2")
-    format("woff2");
-}
-
-@font-face {
-  font-family: "Lato";
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url("https://fonts.gstatic.com/s/lato/v24/S6uyw4BMUTPHjx4wXg.woff2")
-    format("woff2");
-}
-
-@font-face {
-  font-family: "Lato";
-  font-style: normal;
-  font-weight: 700;
-  font-display: swap;
-  src: url("https://fonts.gstatic.com/s/lato/v24/S6u9w4BMUTPHh6UVSwiPGQ.woff2")
-    format("woff2");
+  /* Fonts - Using Next.js font variable */
+  --font-heading: var(--font-amina, "Amina", Georgia, serif);
+  --font-body: var(--font-amina, "Amina", Georgia, serif);
+  --font-primary: var(--font-amina, "Amina", Georgia, serif);
 }
 
 * {
@@ -61,7 +26,7 @@ html {
 }
 
 body {
-  font-family: var(--font-body);
+  font-family: var(--font-amina), Georgia, serif;
   color: var(--color-text-dark);
   background-color: var(--color-cream);
   line-height: 1.6;
@@ -73,9 +38,31 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: var(--font-heading);
-  font-weight: 600;
+  font-family: var(--font-amina), Georgia, serif;
+  font-weight: 700;
   line-height: 1.2;
+}
+
+p,
+span,
+div,
+a,
+button,
+input,
+textarea,
+select,
+label,
+li,
+td,
+th {
+  font-family: var(--font-amina), Georgia, serif !important;
+}
+
+/* Override Tailwind font classes to use Amina */
+.font-serif,
+.font-sans,
+.font-mono {
+  font-family: var(--font-primary) !important;
 }
 
 /* Custom animations */
@@ -136,17 +123,11 @@ h6 {
   animation-delay: 0.5s;
 }
 
-/* Gold gradient text */
+/* White gradient text (formerly gold) */
 .text-gold-gradient {
-  background: linear-gradient(
-    135deg,
-    var(--color-gold) 0%,
-    var(--color-gold-light) 50%,
-    var(--color-gold) 100%
-  );
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--color-white);
+  font-weight: 700;
+  font-family: var(--font-heading);
 }
 
 /* Decorative separator */
@@ -155,7 +136,7 @@ h6 {
   background: linear-gradient(
     90deg,
     transparent,
-    var(--color-gold),
+    var(--color-white),
     transparent
   );
 }
@@ -172,11 +153,7 @@ h6 {
 
 /* Button styles */
 .btn-primary {
-  background: linear-gradient(
-    135deg,
-    var(--color-gold) 0%,
-    var(--color-gold-light) 100%
-  );
+  background: var(--color-white);
   color: var(--color-navy);
   padding: 1rem 2rem;
   font-weight: 700;
@@ -188,14 +165,14 @@ h6 {
 }
 
 .btn-primary:hover {
-  box-shadow: 0 10px 30px rgba(201, 169, 98, 0.4);
+  box-shadow: 0 10px 30px rgba(255, 255, 255, 0.4);
   transform: translateY(-2px);
 }
 
 .btn-secondary {
   background: transparent;
-  border: 2px solid var(--color-gold);
-  color: var(--color-gold);
+  border: 2px solid var(--color-white);
+  color: var(--color-white);
   padding: 1rem 2rem;
   font-weight: 700;
   text-transform: uppercase;
@@ -205,39 +182,22 @@ h6 {
 }
 
 .btn-secondary:hover {
-  background: var(--color-gold);
+  background: var(--color-white);
   color: var(--color-navy);
 }
 
-/* Star of David decorative element */
-.star-of-david {
+/* Logo element (replaces Star of David) */
+.logo-element {
   position: relative;
   width: 40px;
   height: 40px;
+  display: inline-block;
 }
 
-.star-of-david::before,
-.star-of-david::after {
-  content: "";
-  position: absolute;
-  width: 0;
-  height: 0;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-.star-of-david::before {
-  top: 4px;
-  border-left: 20px solid transparent;
-  border-right: 20px solid transparent;
-  border-bottom: 32px solid var(--color-gold);
-}
-
-.star-of-david::after {
-  bottom: 4px;
-  border-left: 20px solid transparent;
-  border-right: 20px solid transparent;
-  border-top: 32px solid var(--color-gold);
+.logo-element img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 
 /* Section backgrounds */

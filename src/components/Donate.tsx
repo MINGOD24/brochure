@@ -24,7 +24,7 @@ export default function Donate() {
           <div className="max-w-2xl mx-auto text-center">
             <div className="bg-green-50 border border-green-200 rounded-2xl p-12">
               <div className="text-green-600 text-6xl mb-6">✓</div>
-              <h2 className="text-3xl font-serif text-green-800 mb-4">
+              <h2 className="text-3xl text-green-800 mb-4">
                 Thank You!
               </h2>
               <p className="text-lg text-green-700 mb-4">
@@ -58,10 +58,10 @@ export default function Donate() {
         <div className="max-w-4xl mx-auto">
           {/* Header */}
           <div className="text-center mb-12">
-            <span className="inline-block text-gold text-sm font-semibold tracking-wider uppercase mb-4">
+            <span className="inline-block text-[var(--color-navy)] text-sm font-semibold tracking-wider uppercase mb-4 font-bold">
               — Support Our Work —
             </span>
-            <h2 className="text-4xl md:text-5xl font-serif text-navy mb-4">
+            <h2 className="text-4xl md:text-5xl text-navy mb-4">
               Make a Donation
             </h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
@@ -115,7 +115,7 @@ export default function Donate() {
                     }}
                     placeholder="Enter amount"
                     min="1"
-                    className="w-full pl-10 pr-4 py-4 text-lg border-2 border-gray-200 rounded-lg focus:border-gold focus:ring-0 transition-colors"
+                    className="w-full pl-10 pr-4 py-4 text-lg border-2 border-gray-200 rounded-lg focus:border-[var(--color-navy)] focus:ring-0 transition-colors"
                   />
                 </div>
               </div>
@@ -125,21 +125,29 @@ export default function Donate() {
                 <h4 className="font-semibold text-navy mb-3">Your Impact</h4>
                 <ul className="space-y-2 text-sm text-gray-600">
                   <li className="flex items-start gap-2">
-                    <span className="text-gold mt-0.5">✓</span>
+                    <span className="text-[var(--color-navy)] mt-0.5 font-bold">
+                      ✓
+                    </span>
                     <span>
                       $25 - Provides educational materials for 5 students
                     </span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <span className="text-gold mt-0.5">✓</span>
+                    <span className="text-[var(--color-navy)] mt-0.5 font-bold">
+                      ✓
+                    </span>
                     <span>$100 - Sponsors a community workshop session</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <span className="text-gold mt-0.5">✓</span>
+                    <span className="text-[var(--color-navy)] mt-0.5 font-bold">
+                      ✓
+                    </span>
                     <span>$500 - Supports a traveling exhibition</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <span className="text-gold mt-0.5">✓</span>
+                    <span className="text-[var(--color-navy)] mt-0.5 font-bold">
+                      ✓
+                    </span>
                     <span>$1000 - Funds a full educator training program</span>
                   </li>
                 </ul>
@@ -156,7 +164,7 @@ export default function Donate() {
                 <PaymentForm
                   key={activeAmount}
                   presetAmount={activeAmount}
-                  description="JHEAC Donation"
+                  description="JHEA Donation"
                   onSuccess={(txId) => {
                     setShowSuccess(true);
                     setTransactionId(txId);

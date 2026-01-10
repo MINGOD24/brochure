@@ -19,15 +19,15 @@ export default function Projections({ projections }: ProjectionsProps) {
       <div className="absolute inset-0 pattern-overlay opacity-30" />
 
       {/* Decorative elements */}
-      <div className="absolute top-1/4 right-0 w-64 h-64 bg-[var(--color-gold)]/5 rounded-full blur-3xl" />
-      <div className="absolute bottom-1/4 left-0 w-64 h-64 bg-[var(--color-gold)]/5 rounded-full blur-3xl" />
+      <div className="absolute top-1/4 right-0 w-64 h-64 bg-[var(--color-white)]/5 rounded-full blur-3xl" />
+      <div className="absolute bottom-1/4 left-0 w-64 h-64 bg-[var(--color-white)]/5 rounded-full blur-3xl" />
 
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         {/* Section Header */}
         <div className="text-center mb-16">
           <div className="flex items-center justify-center gap-4 mb-6">
-            <div className="h-px w-12 bg-[var(--color-gold)]" />
-            <span className="text-[var(--color-gold)] uppercase tracking-[0.2em] text-sm font-medium">
+            <div className="h-px w-12 bg-[var(--color-white)]" />
+            <span className="text-[var(--color-white)] uppercase tracking-[0.2em] text-sm font-medium font-bold">
               Looking Forward
             </span>
             <div className="h-px w-12 bg-[var(--color-gold)]" />
@@ -48,15 +48,15 @@ export default function Projections({ projections }: ProjectionsProps) {
           {projections.map((projection, index) => (
             <div
               key={projection.id}
-              className="card-hover bg-[var(--color-navy-light)]/50 backdrop-blur-sm border border-[var(--color-gold)]/20 rounded-lg p-8 relative overflow-hidden group"
+              className="card-hover bg-[var(--color-navy-light)]/50 backdrop-blur-sm border border-[var(--color-white)]/20 rounded-lg p-8 relative overflow-hidden group"
             >
               {/* Number indicator */}
-              <div className="absolute top-4 right-4 text-6xl font-bold text-[var(--color-gold)]/10 group-hover:text-[var(--color-gold)]/20 transition-colors">
+              <div className="absolute top-4 right-4 text-6xl font-bold text-[var(--color-white)]/10 group-hover:text-[var(--color-white)]/20 transition-colors">
                 {String(index + 1).padStart(2, "0")}
               </div>
 
               {/* Icon */}
-              <div className="w-12 h-12 rounded-full bg-[var(--color-gold)]/10 border border-[var(--color-gold)]/30 flex items-center justify-center mb-6 group-hover:bg-[var(--color-gold)]/20 transition-colors">
+              <div className="w-12 h-12 rounded-full bg-[var(--color-white)]/10 border border-[var(--color-white)]/30 flex items-center justify-center mb-6 group-hover:bg-[var(--color-white)]/20 transition-colors">
                 <ProjectionIcon index={index} />
               </div>
 
@@ -69,7 +69,7 @@ export default function Projections({ projections }: ProjectionsProps) {
                 {projection.description}
               </p>
 
-              <div className="flex items-center gap-2 text-[var(--color-gold)] text-sm">
+              <div className="flex items-center gap-2 text-[var(--color-white)] text-sm font-bold">
                 <svg
                   className="w-4 h-4"
                   fill="none"
@@ -87,7 +87,7 @@ export default function Projections({ projections }: ProjectionsProps) {
               </div>
 
               {/* Bottom accent line */}
-              <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[var(--color-gold)] to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+              <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[var(--color-white)] to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
             </div>
           ))}
         </div>
@@ -101,7 +101,7 @@ function ProjectionIcon({ index }: { index: number }) {
     // Book - Educational Materials
     <svg
       key="book"
-      className="w-6 h-6 text-[var(--color-gold)]"
+      className="w-6 h-6 text-[var(--color-white)]"
       fill="none"
       stroke="currentColor"
       viewBox="0 0 24 24"
@@ -116,7 +116,7 @@ function ProjectionIcon({ index }: { index: number }) {
     // Sparkles - Interactive Experiences
     <svg
       key="sparkles"
-      className="w-6 h-6 text-[var(--color-gold)]"
+      className="w-6 h-6 text-[var(--color-white)]"
       fill="none"
       stroke="currentColor"
       viewBox="0 0 24 24"
@@ -131,7 +131,7 @@ function ProjectionIcon({ index }: { index: number }) {
     // Link - Partnership
     <svg
       key="link"
-      className="w-6 h-6 text-[var(--color-gold)]"
+      className="w-6 h-6 text-[var(--color-white)]"
       fill="none"
       stroke="currentColor"
       viewBox="0 0 24 24"
@@ -146,7 +146,7 @@ function ProjectionIcon({ index }: { index: number }) {
     // Users - Community
     <svg
       key="users"
-      className="w-6 h-6 text-[var(--color-gold)]"
+      className="w-6 h-6 text-[var(--color-white)]"
       fill="none"
       stroke="currentColor"
       viewBox="0 0 24 24"
@@ -161,7 +161,7 @@ function ProjectionIcon({ index }: { index: number }) {
     // Chip - Technology
     <svg
       key="chip"
-      className="w-6 h-6 text-[var(--color-gold)]"
+      className="w-6 h-6 text-[var(--color-white)]"
       fill="none"
       stroke="currentColor"
       viewBox="0 0 24 24"

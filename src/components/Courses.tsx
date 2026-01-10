@@ -17,14 +17,14 @@ export default function Courses({ courses }: CoursesProps) {
   return (
     <section id="courses" className="py-24 bg-cream relative overflow-hidden">
       {/* Background decoration */}
-      <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[var(--color-gold)] to-transparent opacity-30" />
+      <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[var(--color-white)] to-transparent opacity-30" />
 
       <div className="max-w-7xl mx-auto px-6">
         {/* Section Header */}
         <div className="text-center mb-16">
           <div className="flex items-center justify-center gap-4 mb-6">
-            <div className="h-px w-12 bg-[var(--color-gold)]" />
-            <span className="text-[var(--color-gold)] uppercase tracking-[0.2em] text-sm font-medium">
+            <div className="h-px w-12 bg-[var(--color-white)]" />
+            <span className="text-[var(--color-white)] uppercase tracking-[0.2em] text-sm font-medium font-bold">
               Educational Programs
             </span>
             <div className="h-px w-12 bg-[var(--color-gold)]" />
@@ -64,14 +64,14 @@ export default function Courses({ courses }: CoursesProps) {
                 <div className="absolute inset-0 bg-gradient-to-t from-[var(--color-navy)] to-transparent opacity-60" />
 
                 {/* Format badge */}
-                <div className="absolute top-4 right-4 bg-[var(--color-gold)] text-[var(--color-navy)] px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">
+                <div className="absolute top-4 right-4 bg-[var(--color-white)] text-[var(--color-navy)] px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">
                   {course.format}
                 </div>
               </div>
 
               {/* Content */}
               <div className="p-6">
-                <h3 className="text-xl font-semibold text-[var(--color-navy)] mb-3 group-hover:text-[var(--color-gold)] transition-colors">
+                <h3 className="text-xl font-semibold text-[var(--color-navy)] mb-3 group-hover:text-[var(--color-navy-light)] transition-colors">
                   {course.title}
                 </h3>
 
@@ -100,7 +100,7 @@ export default function Courses({ courses }: CoursesProps) {
 
                   <Link
                     href="#contact"
-                    className="text-[var(--color-gold)] font-medium text-sm hover:text-[var(--color-navy)] transition-colors flex items-center gap-1"
+                    className="text-[var(--color-navy)] font-medium text-sm hover:text-[var(--color-navy-light)] transition-colors flex items-center gap-1 font-bold"
                   >
                     Learn More
                     <svg
@@ -139,7 +139,7 @@ function CourseIcon({ index }: { index: number }) {
     // Holocaust Education
     <svg
       key="candle"
-      className="w-20 h-20 text-[var(--color-gold)]/30"
+      className="w-20 h-20 text-[var(--color-navy)]/30"
       fill="none"
       stroke="currentColor"
       viewBox="0 0 24 24"
@@ -154,7 +154,7 @@ function CourseIcon({ index }: { index: number }) {
     // Heritage & Culture
     <svg
       key="scroll"
-      className="w-20 h-20 text-[var(--color-gold)]/30"
+      className="w-20 h-20 text-[var(--color-navy)]/30"
       fill="none"
       stroke="currentColor"
       viewBox="0 0 24 24"
@@ -169,7 +169,7 @@ function CourseIcon({ index }: { index: number }) {
     // Combating Antisemitism
     <svg
       key="shield"
-      className="w-20 h-20 text-[var(--color-gold)]/30"
+      className="w-20 h-20 text-[var(--color-navy)]/30"
       fill="none"
       stroke="currentColor"
       viewBox="0 0 24 24"

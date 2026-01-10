@@ -1,8 +1,37 @@
 import type { Metadata } from "next";
+import localFont from "next/font/local";
 import "./globals.css";
 
+const amina = localFont({
+  src: [
+    {
+      path: "../../public/fonts/font/Amina-Light.woff2",
+      weight: "300",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/font/Amina-Light.woff",
+      weight: "300",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/font/Amina-Bold.woff2",
+      weight: "700",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/font/Amina-Bold.woff",
+      weight: "700",
+      style: "normal",
+    },
+  ],
+  variable: "--font-amina",
+  fallback: ["Georgia", "serif"],
+  display: "swap",
+});
+
 export const metadata: Metadata = {
-  title: "Jewish Heritage Education and Advocacy Center | JHEAC",
+  title: "Jewish Heritage Education and Advocacy Center | JHEA",
   description:
     "Based in Florida, the Jewish Heritage Education and Advocacy Center carries the message of the Jewish Museum of Chile across North America. We combat antisemitism and celebrate Jewish heritage through education.",
   keywords: [
@@ -10,7 +39,7 @@ export const metadata: Metadata = {
     "Holocaust education",
     "antisemitism",
     "Jewish Museum of Chile",
-    "JHEAC",
+    "JHEA",
     "Jewish education",
     "cultural education",
   ],
@@ -36,15 +65,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="scroll-smooth">
-      <head>
-        <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossOrigin="anonymous"
-        />
-      </head>
-      <body className="antialiased">{children}</body>
+    <html lang="en" className={`scroll-smooth ${amina.variable}`}>
+      <body className={`antialiased ${amina.className}`}>{children}</body>
     </html>
   );
 }

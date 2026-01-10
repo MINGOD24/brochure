@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 
 interface HeroProps {
   title: string;
@@ -37,24 +38,22 @@ export default function Hero({
 
       {/* Decorative Elements */}
       <div className="absolute top-20 left-10 opacity-10">
-        <svg width="200" height="200" viewBox="0 0 100 100">
-          <polygon
-            points="50,5 61,35 95,35 68,55 79,90 50,70 21,90 32,55 5,35 39,35"
-            fill="none"
-            stroke="var(--color-gold)"
-            strokeWidth="1"
-          />
-        </svg>
+        <Image
+          src="/LOGO.svg"
+          alt=""
+          width={192}
+          height={192}
+          className="object-contain"
+        />
       </div>
       <div className="absolute bottom-20 right-10 opacity-10">
-        <svg width="150" height="150" viewBox="0 0 100 100">
-          <polygon
-            points="50,5 61,35 95,35 68,55 79,90 50,70 21,90 32,55 5,35 39,35"
-            fill="none"
-            stroke="var(--color-gold)"
-            strokeWidth="1"
-          />
-        </svg>
+        <Image
+          src="/LOGO.svg"
+          alt=""
+          width={144}
+          height={144}
+          className="object-contain"
+        />
       </div>
 
       {/* Content */}
@@ -64,14 +63,14 @@ export default function Hero({
           className="flex items-center justify-center gap-4 mb-8 animate-fade-in-up opacity-0"
           style={{ animationDelay: "0.1s", animationFillMode: "forwards" }}
         >
-          <div className="h-px w-16 bg-[var(--color-gold)]" />
-          <div className="w-3 h-3 rotate-45 border border-[var(--color-gold)]" />
-          <div className="h-px w-16 bg-[var(--color-gold)]" />
+          <div className="h-px w-16 bg-[var(--color-white)]" />
+          <div className="w-3 h-3 rotate-45 border border-[var(--color-white)]" />
+          <div className="h-px w-16 bg-[var(--color-white)]" />
         </div>
 
         {/* Subtitle */}
         <p
-          className="text-[var(--color-gold)] uppercase tracking-[0.3em] text-sm md:text-base mb-4 animate-fade-in-up opacity-0"
+          className="text-[var(--color-white)] uppercase tracking-[0.3em] text-sm md:text-base mb-4 animate-fade-in-up opacity-0 font-bold"
           style={{ animationDelay: "0.2s", animationFillMode: "forwards" }}
         >
           {subtitle}
@@ -79,7 +78,7 @@ export default function Hero({
 
         {/* Title */}
         <h1
-          className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-semibold text-[var(--color-cream)] mb-8 leading-tight animate-fade-in-up opacity-0"
+          className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-[var(--color-cream)] mb-8 leading-tight animate-fade-in-up opacity-0 text-center"
           style={{ animationDelay: "0.3s", animationFillMode: "forwards" }}
         >
           {title.split(" ").map((word, i) => (
@@ -121,7 +120,7 @@ export default function Hero({
           className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-fade-in opacity-0"
           style={{ animationDelay: "1s", animationFillMode: "forwards" }}
         >
-          <div className="scroll-indicator flex flex-col items-center gap-2 text-[var(--color-gold)]">
+          <div className="scroll-indicator flex flex-col items-center gap-2 text-[var(--color-white)]">
             <span className="text-xs uppercase tracking-widest">Scroll</span>
             <svg
               className="w-5 h-5"

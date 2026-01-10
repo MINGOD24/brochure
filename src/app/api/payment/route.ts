@@ -26,7 +26,12 @@ export async function POST(request: NextRequest) {
     const body: PaymentRequest = await request.json();
 
     // Validate required fields
-    if (!body.amount || !body.cardNumber || !body.expirationDate || !body.cardCode) {
+    if (
+      !body.amount ||
+      !body.cardNumber ||
+      !body.expirationDate ||
+      !body.cardCode
+    ) {
       return NextResponse.json(
         { success: false, error: "Missing required payment fields" },
         { status: 400 }
@@ -42,7 +47,8 @@ export async function POST(request: NextRequest) {
     }
 
     // Create merchant authentication
-    const merchantAuthentication = new ApiContracts.MerchantAuthenticationType();
+    const merchantAuthentication =
+      new ApiContracts.MerchantAuthenticationType();
     merchantAuthentication.setName(API_LOGIN_ID);
     merchantAuthentication.setTransactionKey(TRANSACTION_KEY);
 
@@ -58,7 +64,9 @@ export async function POST(request: NextRequest) {
     // Create order information
     const orderDetails = new ApiContracts.OrderType();
     orderDetails.setInvoiceNumber(`INV-${Date.now()}`);
-    orderDetails.setDescription(body.description || "JHEAC Donation/Course Payment");
+    orderDetails.setDescription(
+      body.description || "JHEA Donation/Course Payment"
+    );
 
     // Create customer information
     const customerData = new ApiContracts.CustomerDataType();
@@ -102,7 +110,9 @@ export async function POST(request: NextRequest) {
     return new Promise<NextResponse>((resolve) => {
       controller.execute(() => {
         const apiResponse = controller.getResponse();
-        const response = new ApiContracts.CreateTransactionResponse(apiResponse);
+        const response = new ApiContracts.CreateTransactionResponse(
+          apiResponse
+        );
 
         if (response !== null) {
           if (
@@ -117,7 +127,10 @@ export async function POST(request: NextRequest) {
                   success: true,
                   transactionId: transactionResponse.getTransId(),
                   authCode: transactionResponse.getAuthCode(),
-                  message: transactionResponse.getMessages().getMessage()[0].getDescription(),
+                  message: transactionResponse
+                    .getMessages()
+                    .getMessage()[0]
+                    .getDescription(),
                 })
               );
             } else {
@@ -141,7 +154,10 @@ export async function POST(request: NextRequest) {
                 NextResponse.json(
                   {
                     success: false,
-                    error: transactionResponse.getErrors().getError()[0].getErrorText(),
+                    error: transactionResponse
+                      .getErrors()
+                      .getError()[0]
+                      .getErrorText(),
                   },
                   { status: 400 }
                 )
@@ -176,4 +192,3 @@ export async function POST(request: NextRequest) {
     );
   }
 }
-

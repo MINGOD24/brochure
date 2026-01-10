@@ -1,0 +1,120 @@
+@font-face {
+    font-family: 'Amina';
+    src: url('Amina-BoldItalic.eot');
+    src: local('Amina Bold Italic'), local('Amina-BoldItalic'),
+        url('Amina-BoldItalic.eot?#iefix') format('embedded-opentype'),
+        url('Amina-BoldItalic.woff2') format('woff2'),
+        url('Amina-BoldItalic.woff') format('woff'),
+        url('Amina-BoldItalic.ttf') format('truetype');
+    font-weight: bold;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Amina';
+    src: url('Amina-Black.eot');
+    src: local('Amina Black'), local('Amina-Black'),
+        url('Amina-Black.eot?#iefix') format('embedded-opentype'),
+        url('Amina-Black.woff2') format('woff2'),
+        url('Amina-Black.woff') format('woff'),
+        url('Amina-Black.ttf') format('truetype');
+    font-weight: 900;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Amina';
+    src: url('Amina-Bold.eot');
+    src: local('Amina Bold'), local('Amina-Bold'),
+        url('Amina-Bold.eot?#iefix') format('embedded-opentype'),
+        url('Amina-Bold.woff2') format('woff2'),
+        url('Amina-Bold.woff') format('woff'),
+        url('Amina-Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Amina';
+    src: url('Amina-LightItalic.eot');
+    src: local('Amina Light Italic'), local('Amina-LightItalic'),
+        url('Amina-LightItalic.eot?#iefix') format('embedded-opentype'),
+        url('Amina-LightItalic.woff2') format('woff2'),
+        url('Amina-LightItalic.woff') format('woff'),
+        url('Amina-LightItalic.ttf') format('truetype');
+    font-weight: 300;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Amina';
+    src: url('Amina-BlackItalic.eot');
+    src: local('Amina Black Italic'), local('Amina-BlackItalic'),
+        url('Amina-BlackItalic.eot?#iefix') format('embedded-opentype'),
+        url('Amina-BlackItalic.woff2') format('woff2'),
+        url('Amina-BlackItalic.woff') format('woff'),
+        url('Amina-BlackItalic.ttf') format('truetype');
+    font-weight: 900;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Amina';
+    src: url('Amina-Italic.eot');
+    src: local('Amina Italic'), local('Amina-Italic'),
+        url('Amina-Italic.eot?#iefix') format('embedded-opentype'),
+        url('Amina-Italic.woff2') format('woff2'),
+        url('Amina-Italic.woff') format('woff'),
+        url('Amina-Italic.ttf') format('truetype');
+    font-weight: normal;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Amina';
+    src: url('Amina-MediumItalic.eot');
+    src: local('Amina Medium Italic'), local('Amina-MediumItalic'),
+        url('Amina-MediumItalic.eot?#iefix') format('embedded-opentype'),
+        url('Amina-MediumItalic.woff2') format('woff2'),
+        url('Amina-MediumItalic.woff') format('woff'),
+        url('Amina-MediumItalic.ttf') format('truetype');
+    font-weight: 500;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Amina';
+    src: url('Amina-Light.eot');
+    src: local('Amina Light'), local('Amina-Light'),
+        url('Amina-Light.eot?#iefix') format('embedded-opentype'),
+        url('Amina-Light.woff2') format('woff2'),
+        url('Amina-Light.woff') format('woff'),
+        url('Amina-Light.ttf') format('truetype');
+    font-weight: 300;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Amina';
+    src: url('Amina-Regular.eot');
+    src: local('Amina'), local('Amina-Regular'),
+        url('Amina-Regular.eot?#iefix') format('embedded-opentype'),
+        url('Amina-Regular.woff2') format('woff2'),
+        url('Amina-Regular.woff') format('woff'),
+        url('Amina-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Amina';
+    src: url('Amina-Medium.eot');
+    src: local('Amina Medium'), local('Amina-Medium'),
+        url('Amina-Medium.eot?#iefix') format('embedded-opentype'),
+        url('Amina-Medium.woff2') format('woff2'),
+        url('Amina-Medium.woff') format('woff'),
+        url('Amina-Medium.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+}
+

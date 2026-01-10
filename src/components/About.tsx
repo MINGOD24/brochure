@@ -19,14 +19,14 @@ export default function About({
       <div className="absolute inset-0 pattern-overlay opacity-20" />
 
       {/* Decorative elements */}
-      <div className="absolute top-1/3 left-0 w-96 h-96 bg-[var(--color-gold)]/5 rounded-full blur-3xl" />
+      <div className="absolute top-1/3 left-0 w-96 h-96 bg-[var(--color-white)]/5 rounded-full blur-3xl" />
 
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         {/* Section Header */}
         <div className="text-center mb-16">
           <div className="flex items-center justify-center gap-4 mb-6">
-            <div className="h-px w-12 bg-[var(--color-gold)]" />
-            <span className="text-[var(--color-gold)] uppercase tracking-[0.2em] text-sm font-medium">
+            <div className="h-px w-12 bg-[var(--color-white)]" />
+            <span className="text-[var(--color-white)] uppercase tracking-[0.2em] text-sm font-medium font-bold">
               Leadership
             </span>
             <div className="h-px w-12 bg-[var(--color-gold)]" />
@@ -50,9 +50,9 @@ export default function About({
               ) : (
                 <div className="aspect-[4/5] bg-[var(--color-navy-light)] flex items-center justify-center">
                   <div className="text-center">
-                    <div className="w-32 h-32 mx-auto mb-6 rounded-full bg-[var(--color-gold)]/20 flex items-center justify-center">
+                    <div className="w-32 h-32 mx-auto mb-6 rounded-full bg-[var(--color-white)]/20 flex items-center justify-center">
                       <svg
-                        className="w-16 h-16 text-[var(--color-gold)]"
+                        className="w-16 h-16 text-[var(--color-white)]"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -68,7 +68,7 @@ export default function About({
                     <p className="text-[var(--color-cream)] text-2xl font-semibold">
                       {name}
                     </p>
-                    <p className="text-[var(--color-gold)] uppercase tracking-wider text-sm mt-2">
+                    <p className="text-[var(--color-white)] uppercase tracking-wider text-sm mt-2 font-bold">
                       {title}
                     </p>
                   </div>
@@ -76,11 +76,11 @@ export default function About({
               )}
 
               {/* Decorative frame */}
-              <div className="absolute -top-4 -left-4 w-full h-full border-2 border-[var(--color-gold)]/30 rounded-lg pointer-events-none" />
+              <div className="absolute -top-4 -left-4 w-full h-full border-2 border-[var(--color-white)]/30 rounded-lg pointer-events-none" />
             </div>
 
             {/* Quote card */}
-            <div className="absolute -bottom-8 -right-8 bg-[var(--color-gold)] text-[var(--color-navy)] p-6 rounded-lg max-w-xs shadow-xl hidden md:block">
+            <div className="absolute -bottom-8 -right-8 bg-[var(--color-white)] text-[var(--color-navy)] p-6 rounded-lg max-w-xs shadow-xl hidden md:block">
               <svg
                 className="w-8 h-8 mb-2 opacity-30"
                 fill="currentColor"
@@ -88,7 +88,7 @@ export default function About({
               >
                 <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
               </svg>
-              <p className="font-serif italic text-sm">
+              <p className="italic text-sm">
                 &ldquo;Education is the most powerful weapon to change the world
                 and combat hatred.&rdquo;
               </p>
@@ -101,7 +101,7 @@ export default function About({
               <h3 className="text-3xl font-semibold text-[var(--color-cream)] mb-2">
                 {name}
               </h3>
-              <p className="text-[var(--color-gold)] uppercase tracking-wider text-sm">
+              <p className="text-[var(--color-white)] uppercase tracking-wider text-sm font-bold">
                 {title}
               </p>
             </div>
@@ -112,7 +112,7 @@ export default function About({
 
             {/* Achievements */}
             <div className="space-y-4">
-              <h4 className="text-[var(--color-gold)] uppercase tracking-wider text-sm font-medium mb-4">
+              <h4 className="text-[var(--color-white)] uppercase tracking-wider text-sm font-medium mb-4 font-bold">
                 Achievements & Affiliations
               </h4>
 
@@ -123,7 +123,7 @@ export default function About({
                     className="flex items-start gap-3 text-[var(--color-cream)]/80"
                   >
                     <svg
-                      className="w-5 h-5 text-[var(--color-gold)] flex-shrink-0 mt-0.5"
+                      className="w-5 h-5 text-[var(--color-white)] flex-shrink-0 mt-0.5"
                       fill="currentColor"
                       viewBox="0 0 20 20"
                     >

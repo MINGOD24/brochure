@@ -13,23 +13,24 @@ interface NewsProps {
 }
 
 // Source logo/icon mapping with direct URLs from sources
-const sourceLogos: Record<string, { logo: string; bg: string; text: string }> = {
-  "Vin News": {
-    logo: "https://vinnews.com/wp-content/uploads/2020/04/vin-white-logo.png",
-    bg: "bg-[#1a365d]",
-    text: "VN",
-  },
-  Matzav: {
-    logo: "https://matzav.com/wp-content/uploads/2017/04/matzav-logo-300x53.png",
-    bg: "bg-white",
-    text: "M",
-  },
-  "Vents Magazine": {
-    logo: "https://ventsmagazine.com/wp-content/uploads/2024/09/ventsmagazinesmaller3-1-1024x413-1-e1727540406311.png",
-    bg: "bg-white",
-    text: "V",
-  },
-};
+const sourceLogos: Record<string, { logo: string; bg: string; text: string }> =
+  {
+    "Vin News": {
+      logo: "https://vinnews.com/wp-content/uploads/2020/04/vin-white-logo.png",
+      bg: "bg-[#1a365d]",
+      text: "VN",
+    },
+    Matzav: {
+      logo: "https://matzav.com/wp-content/uploads/2017/04/matzav-logo-300x53.png",
+      bg: "bg-white",
+      text: "M",
+    },
+    "Vents Magazine": {
+      logo: "https://ventsmagazine.com/wp-content/uploads/2024/09/ventsmagazinesmaller3-1-1024x413-1-e1727540406311.png",
+      bg: "bg-white",
+      text: "V",
+    },
+  };
 
 function getSourceInfo(source: string) {
   return sourceLogos[source] || { logo: null, bg: "bg-gray-600", text: "📰" };
@@ -51,21 +52,21 @@ export default function News({ articles }: NewsProps) {
     <section id="news" className="py-24 bg-cream relative overflow-hidden">
       {/* Decorative elements */}
       <div className="absolute top-0 left-0 w-96 h-96 bg-[var(--color-navy)]/5 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2" />
-      <div className="absolute bottom-0 right-0 w-96 h-96 bg-[var(--color-gold)]/5 rounded-full blur-3xl translate-x-1/2 translate-y-1/2" />
+      <div className="absolute bottom-0 right-0 w-96 h-96 bg-[var(--color-white)]/5 rounded-full blur-3xl translate-x-1/2 translate-y-1/2" />
 
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         {/* Section Header */}
         <div className="text-center mb-16">
           <div className="flex items-center justify-center gap-4 mb-6">
-            <div className="h-px w-12 bg-[var(--color-gold)]" />
-            <span className="text-[var(--color-gold)] uppercase tracking-[0.2em] text-sm font-medium">
+            <div className="h-px w-12 bg-[var(--color-white)]" />
+            <span className="text-[var(--color-white)] uppercase tracking-[0.2em] text-sm font-medium font-bold">
               In The Press
             </span>
             <div className="h-px w-12 bg-[var(--color-gold)]" />
           </div>
 
           <h2 className="text-4xl md:text-5xl font-semibold text-[var(--color-navy)] mb-4">
-            JHEAC in the News
+            JHEA in the News
           </h2>
 
           <p className="text-lg text-[var(--color-text-muted)] max-w-2xl mx-auto">
@@ -86,13 +87,15 @@ export default function News({ articles }: NewsProps) {
                 href={article.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-100 hover:border-[var(--color-gold)]/30 hover:-translate-y-2"
+                className="group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-100 hover:border-[var(--color-navy)]/30 hover:-translate-y-2"
               >
                 {/* Header with Source */}
                 <div className="p-6 pb-4 border-b border-gray-100">
                   <div className="flex items-center gap-3">
                     {logoUrl ? (
-                      <div className={`w-12 h-12 rounded-xl overflow-hidden shadow-lg ${sourceInfo.bg} flex items-center justify-center p-1`}>
+                      <div
+                        className={`w-12 h-12 rounded-xl overflow-hidden shadow-lg ${sourceInfo.bg} flex items-center justify-center p-1`}
+                      >
                         <img
                           src={logoUrl}
                           alt={article.source}
@@ -119,7 +122,7 @@ export default function News({ articles }: NewsProps) {
 
                 {/* Content */}
                 <div className="p-6">
-                  <h3 className="text-lg font-semibold text-[var(--color-navy)] mb-3 line-clamp-3 group-hover:text-[var(--color-gold)] transition-colors leading-snug">
+                  <h3 className="text-lg font-semibold text-[var(--color-navy)] mb-3 line-clamp-3 group-hover:text-[var(--color-navy-light)] transition-colors leading-snug">
                     {article.title}
                   </h3>
 
@@ -130,7 +133,7 @@ export default function News({ articles }: NewsProps) {
                   )}
 
                   {/* Read More Link */}
-                  <div className="flex items-center gap-2 text-[var(--color-gold)] font-medium text-sm group-hover:gap-3 transition-all">
+                  <div className="flex items-center gap-2 text-[var(--color-navy)] font-medium text-sm group-hover:gap-3 transition-all font-bold">
                     <span>Read Article</span>
                     <svg
                       className="w-4 h-4 transform group-hover:translate-x-1 transition-transform"
@@ -149,7 +152,7 @@ export default function News({ articles }: NewsProps) {
                 </div>
 
                 {/* Bottom accent */}
-                <div className="h-1 bg-gradient-to-r from-[var(--color-navy)] via-[var(--color-gold)] to-[var(--color-navy)] opacity-0 group-hover:opacity-100 transition-opacity" />
+                <div className="h-1 bg-gradient-to-r from-[var(--color-navy)] via-[var(--color-navy-light)] to-[var(--color-navy)] opacity-0 group-hover:opacity-100 transition-opacity" />
               </a>
             );
           })}

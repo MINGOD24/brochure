@@ -2,13 +2,14 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 interface HeaderProps {
   siteName?: string;
   logoUrl?: string | null;
 }
 
-export default function Header({ siteName = "JHEAC", logoUrl }: HeaderProps) {
+export default function Header({ siteName = "JHEA", logoUrl }: HeaderProps) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -33,38 +34,31 @@ export default function Header({ siteName = "JHEAC", logoUrl }: HeaderProps) {
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled
-          ? "bg-[var(--color-navy)] shadow-lg py-3"
-          : "bg-transparent py-6"
+        isScrolled ? "bg-(--color-navy) shadow-lg py-2" : "bg-transparent py-3"
       }`}
     >
       <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-3 group">
           {logoUrl ? (
-            <img src={logoUrl} alt={siteName} className="h-12 w-auto" />
+            <Image
+              src={logoUrl}
+              alt={siteName}
+              width={100}
+              height={100}
+              className="h-12 w-auto"
+            />
           ) : (
-            <div className="flex items-center gap-3">
-              {/* Star of David Icon */}
-              <div className="relative w-10 h-10">
-                <svg viewBox="0 0 100 100" className="w-full h-full">
-                  <polygon
-                    points="50,5 61,35 95,35 68,55 79,90 50,70 21,90 32,55 5,35 39,35"
-                    fill="none"
-                    stroke="var(--color-gold)"
-                    strokeWidth="3"
-                    className="group-hover:stroke-[var(--color-gold-light)] transition-colors"
-                  />
-                </svg>
-              </div>
-              <div className="flex flex-col">
-                <span className="text-[var(--color-gold)] font-bold text-lg tracking-wider">
-                  JHEAC
-                </span>
-                <span className="text-[var(--color-cream)] text-[10px] tracking-widest uppercase opacity-80">
-                  Jewish Heritage Education
-                </span>
-              </div>
+            <div className="relative shrink-0 h-12 flex items-center">
+              <Image
+                src="/LOGO.svg"
+                alt={siteName}
+                width={300}
+                height={48}
+                className="h-12 w-[300px] object-contain"
+                priority
+                unoptimized
+              />
             </div>
           )}
         </Link>
@@ -75,7 +69,7 @@ export default function Header({ siteName = "JHEAC", logoUrl }: HeaderProps) {
             <Link
               key={link.href}
               href={link.href}
-              className="text-[var(--color-cream)] hover:text-[var(--color-gold)] transition-colors text-sm uppercase tracking-wider font-medium"
+              className="text-[var(--color-cream)] hover:text-[var(--color-white)] transition-colors text-sm uppercase tracking-wider font-medium"
             >
               {link.label}
             </Link>
@@ -118,13 +112,13 @@ export default function Header({ siteName = "JHEAC", logoUrl }: HeaderProps) {
 
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
-        <div className="md:hidden bg-[var(--color-navy)] border-t border-[var(--color-gold)]/20 animate-fade-in">
+        <div className="md:hidden bg-[var(--color-navy)] border-t border-[var(--color-white)]/20 animate-fade-in">
           <nav className="flex flex-col p-6 gap-4">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className="text-[var(--color-cream)] hover:text-[var(--color-gold)] transition-colors text-sm uppercase tracking-wider font-medium py-2"
+                className="text-[var(--color-cream)] hover:text-[var(--color-white)] transition-colors text-sm uppercase tracking-wider font-medium py-2"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 {link.label}

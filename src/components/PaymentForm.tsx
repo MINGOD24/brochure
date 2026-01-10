@@ -11,7 +11,7 @@ interface PaymentFormProps {
 
 export default function PaymentForm({
   presetAmount,
-  description = "JHEAC Donation",
+  description = "JHEA Donation",
   onSuccess,
   onError,
 }: PaymentFormProps) {
@@ -150,7 +150,7 @@ export default function PaymentForm({
             step="0.01"
             required
             disabled={!!presetAmount}
-            className="w-full pl-8 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-transparent disabled:bg-gray-100"
+            className="w-full pl-8 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--color-navy)] focus:border-transparent disabled:bg-gray-100"
           />
         </div>
       </div>
@@ -168,7 +168,7 @@ export default function PaymentForm({
             onChange={handleChange}
             placeholder="John"
             required
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-transparent"
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--color-navy)] focus:border-transparent"
           />
         </div>
         <div>
@@ -182,7 +182,7 @@ export default function PaymentForm({
             onChange={handleChange}
             placeholder="Doe"
             required
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-transparent"
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--color-navy)] focus:border-transparent"
           />
         </div>
       </div>
@@ -234,7 +234,7 @@ export default function PaymentForm({
             placeholder="MM/YY"
             required
             inputMode="numeric"
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-transparent"
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--color-navy)] focus:border-transparent"
           />
         </div>
         <div>
@@ -249,7 +249,7 @@ export default function PaymentForm({
             placeholder="123"
             required
             inputMode="numeric"
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-transparent"
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--color-navy)] focus:border-transparent"
           />
         </div>
       </div>
@@ -278,8 +278,7 @@ export default function PaymentForm({
         disabled={loading}
         className="w-full py-4 px-6 font-bold text-lg rounded-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl hover:-translate-y-1"
         style={{
-          background:
-            "linear-gradient(135deg, var(--color-gold) 0%, var(--color-gold-light) 100%)",
+          background: "var(--color-white)",
           color: "var(--color-navy)",
         }}
       >
