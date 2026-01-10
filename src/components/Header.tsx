@@ -55,7 +55,7 @@ export default function Header({ siteName = "JHEA", logoUrl }: HeaderProps) {
                 alt={siteName}
                 width={300}
                 height={48}
-                className="h-12 w-[300px] object-contain"
+                className="w-[300px] h-auto object-contain"
                 priority
                 unoptimized
               />
