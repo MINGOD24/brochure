@@ -24,15 +24,45 @@ export default function Contact({
     interest: "",
     message: "",
   });
+  const [status, setStatus] = useState<
+    "idle" | "loading" | "success" | "error"
+  >("idle");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // In production, this would send to an API endpoint
-    window.location.href = `mailto:${email}?subject=Partnership Inquiry from ${
-      formData.name
-    }&body=${encodeURIComponent(
-      `Name: ${formData.name}\nEmail: ${formData.email}\nOrganization: ${formData.organization}\nInterest: ${formData.interest}\n\nMessage:\n${formData.message}`
-    )}`;
+    setStatus("loading");
+
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          access_key: process.env.NEXT_PUBLIC_WEB3FORMS_KEY,
+          subject: `Partnership Inquiry from ${formData.name}`,
+          from_name: formData.name,
+          ...formData,
+        }),
+      });
+
+      if (response.ok) {
+        setStatus("success");
+        setFormData({
+          name: "",
+          email: "",
+          organization: "",
+          interest: "",
+          message: "",
+        });
+      } else {
+        console.error("Contact form submission error:", response);
+        setStatus("error");
+      }
+    } catch (error) {
+      console.error("Contact form submission error:", error);
+      setStatus("error");
+    }
   };
 
   return (
@@ -175,9 +205,24 @@ export default function Contact({
                 />
               </div>
 
-              <button type="submit" className="w-full btn-primary rounded-lg">
-                Send Message
+              <button
+                type="submit"
+                disabled={status === "loading"}
+                className="w-full btn-primary rounded-lg disabled:opacity-50"
+              >
+                {status === "loading" ? "Sending..." : "Send Message"}
               </button>
+
+              {status === "success" && (
+                <p className="text-green-600 text-center mt-4">
+                  Message sent successfully! We&apos;ll be in touch soon.
+                </p>
+              )}
+              {status === "error" && (
+                <p className="text-red-600 text-center mt-4">
+                  Something went wrong. Please try again or email us directly.
+                </p>
+              )}
             </form>
           </div>
 
