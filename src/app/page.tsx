@@ -21,7 +21,7 @@ import {
   getStrapiImageUrl,
 } from "@/lib/strapi";
 
-export const revalidate = 60; // Revalidate every 60 seconds
+export const revalidate = 86400; // Revalidate once per day (24 hours)
 
 export default async function Home() {
   // Fetch all content from Strapi (with fallbacks)

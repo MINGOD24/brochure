@@ -135,7 +135,7 @@ export function getStrapiImageUrl(image?: StrapiImage | null): string | null {
   return `${STRAPI_URL}${url}`;
 }
 
-// Fetch helper with authentication
+// Fetch helper with authentication and timeout
 async function fetchStrapi<T>(
   endpoint: string,
   options: RequestInit = {}
@@ -150,12 +150,19 @@ async function fetchStrapi<T>(
     headers["Authorization"] = `Bearer ${STRAPI_API_TOKEN}`;
   }
 
+  // Create an AbortController with 10 second timeout
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 10000);
+
   try {
     const response = await fetch(url, {
       ...options,
       headers,
-      next: { revalidate: 60 }, // Revalidate every 60 seconds
+      signal: controller.signal,
+      next: { revalidate: 86400 }, // Revalidate once per day (24 hours)
     });
+
+    clearTimeout(timeoutId);
 
     if (!response.ok) {
       console.error(
@@ -167,7 +174,12 @@ async function fetchStrapi<T>(
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error("Strapi fetch error:", error);
+    clearTimeout(timeoutId);
+    if (error instanceof Error && error.name === "AbortError") {
+      console.error("Strapi fetch timeout:", endpoint);
+    } else {
+      console.error("Strapi fetch error:", error);
+    }
     return null;
   }
 }
