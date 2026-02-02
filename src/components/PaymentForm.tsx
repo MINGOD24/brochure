@@ -1,6 +1,21 @@
 "use client";
 
 import { useState } from "react";
+import {
+  Elements,
+  CardElement,
+  useStripe,
+  useElements,
+} from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
+
+// Initialize Stripe with publishable key
+const stripePromise = loadStripe(
+  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || "",
+  {
+    locale: "en",
+  },
+);
 
 interface PaymentFormProps {
   presetAmount?: number;
@@ -9,12 +24,14 @@ interface PaymentFormProps {
   onError?: (error: string) => void;
 }
 
-export default function PaymentForm({
+function PaymentFormInner({
   presetAmount,
   description = "JHEA Donation",
   onSuccess,
   onError,
 }: PaymentFormProps) {
+  const stripe = useStripe();
+  const elements = useElements();
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -25,42 +42,10 @@ export default function PaymentForm({
     firstName: "",
     lastName: "",
     email: "",
-    cardNumber: "",
-    expirationDate: "",
-    cardCode: "",
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-
-    // Format card number with spaces
-    if (name === "cardNumber") {
-      const formatted = value
-        .replace(/\s/g, "")
-        .replace(/(\d{4})/g, "$1 ")
-        .trim()
-        .slice(0, 19);
-      setFormData((prev) => ({ ...prev, [name]: formatted }));
-      return;
-    }
-
-    // Format expiration date as MM/YY
-    if (name === "expirationDate") {
-      const cleaned = value.replace(/\D/g, "");
-      let formatted = cleaned;
-      if (cleaned.length >= 2) {
-        formatted = cleaned.slice(0, 2) + "/" + cleaned.slice(2, 4);
-      }
-      setFormData((prev) => ({ ...prev, [name]: formatted.slice(0, 5) }));
-      return;
-    }
-
-    // Limit CVV to 4 digits
-    if (name === "cardCode") {
-      setFormData((prev) => ({ ...prev, [name]: value.slice(0, 4) }));
-      return;
-    }
-
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
@@ -69,7 +54,46 @@ export default function PaymentForm({
     setLoading(true);
     setError(null);
 
+    if (!stripe || !elements) {
+      setError("Stripe has not loaded yet. Please try again.");
+      setLoading(false);
+      return;
+    }
+
+    const cardElement = elements.getElement(CardElement);
+    if (!cardElement) {
+      setError("Card element not found. Please refresh the page.");
+      setLoading(false);
+      return;
+    }
+
     try {
+      // Create payment method
+      const { paymentMethod, error: pmError } =
+        await stripe.createPaymentMethod({
+          type: "card",
+          card: cardElement,
+          billing_details: {
+            name: `${formData.firstName} ${formData.lastName}`,
+            email: formData.email,
+          },
+        });
+
+      if (pmError) {
+        setError(pmError.message || "Failed to create payment method");
+        onError?.(pmError.message || "Failed to create payment method");
+        setLoading(false);
+        return;
+      }
+
+      if (!paymentMethod) {
+        setError("Failed to create payment method");
+        onError?.("Failed to create payment method");
+        setLoading(false);
+        return;
+      }
+
+      // Send payment to backend
       const response = await fetch("/api/payment", {
         method: "POST",
         headers: {
@@ -77,9 +101,7 @@ export default function PaymentForm({
         },
         body: JSON.stringify({
           amount: parseFloat(formData.amount),
-          cardNumber: formData.cardNumber.replace(/\s/g, ""),
-          expirationDate: formData.expirationDate,
-          cardCode: formData.cardCode,
+          paymentMethodId: paymentMethod.id,
           firstName: formData.firstName,
           lastName: formData.lastName,
           email: formData.email,
@@ -93,17 +115,50 @@ export default function PaymentForm({
         setSuccess(true);
         setTransactionId(data.transactionId);
         onSuccess?.(data.transactionId);
+      } else if (data.requiresAction && data.clientSecret) {
+        // Handle 3D Secure or other additional authentication
+        const { error: confirmError } = await stripe.confirmCardPayment(
+          data.clientSecret,
+        );
+
+        if (confirmError) {
+          setError(confirmError.message || "Payment authentication failed");
+          onError?.(confirmError.message || "Payment authentication failed");
+        } else {
+          // Payment succeeded after authentication
+          setSuccess(true);
+          setTransactionId(data.paymentIntentId);
+          onSuccess?.(data.paymentIntentId);
+        }
       } else {
         setError(data.error || "Payment failed");
-        onError?.(data.error);
+        onError?.(data.error || "Payment failed");
       }
-    } catch (err) {
-      const errorMessage = "An error occurred processing your payment";
+    } catch (err: unknown) {
+      const errorMessage =
+        err instanceof Error
+          ? err.message
+          : "An error occurred processing your payment";
       setError(errorMessage);
       onError?.(errorMessage);
     } finally {
       setLoading(false);
     }
+  };
+
+  const cardElementOptions = {
+    style: {
+      base: {
+        fontSize: "16px",
+        color: "#424770",
+        "::placeholder": {
+          color: "#aab7c4",
+        },
+      },
+      invalid: {
+        color: "#9e2146",
+      },
+    },
   };
 
   if (success) {
@@ -203,54 +258,13 @@ export default function PaymentForm({
         />
       </div>
 
-      {/* Card Number */}
+      {/* Card Element */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
-          Card Number *
+          Card Information *
         </label>
-        <input
-          type="text"
-          name="cardNumber"
-          value={formData.cardNumber}
-          onChange={handleChange}
-          placeholder="4111 1111 1111 1111"
-          required
-          inputMode="numeric"
-          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-transparent"
-        />
-      </div>
-
-      {/* Expiry & CVV Row */}
-      <div className="grid grid-cols-2 gap-4">
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Expiration Date *
-          </label>
-          <input
-            type="text"
-            name="expirationDate"
-            value={formData.expirationDate}
-            onChange={handleChange}
-            placeholder="MM/YY"
-            required
-            inputMode="numeric"
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--color-navy)] focus:border-transparent"
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            CVV *
-          </label>
-          <input
-            type="text"
-            name="cardCode"
-            value={formData.cardCode}
-            onChange={handleChange}
-            placeholder="123"
-            required
-            inputMode="numeric"
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--color-navy)] focus:border-transparent"
-          />
+        <div className="px-4 py-3 border border-gray-300 rounded-lg focus-within:ring-2 focus-within:ring-[var(--color-navy)] focus-within:border-transparent">
+          <CardElement options={cardElementOptions} />
         </div>
       </div>
 
@@ -275,7 +289,7 @@ export default function PaymentForm({
       {/* Submit Button */}
       <button
         type="submit"
-        disabled={loading}
+        disabled={loading || !stripe}
         className="w-full py-4 px-6 font-bold text-lg rounded-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl hover:-translate-y-1"
         style={{
           background: "var(--color-white)",
@@ -321,18 +335,14 @@ export default function PaymentForm({
           </span>
         )}
       </button>
-
-      {/* Test Card Info (for sandbox) */}
-      {process.env.NODE_ENV === "development" && (
-        <div className="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg text-sm">
-          <p className="font-medium text-yellow-800 mb-1">🧪 Test Mode</p>
-          <p className="text-yellow-700">
-            Use card:{" "}
-            <code className="bg-yellow-100 px-1">4111 1111 1111 1111</code>, any
-            future date, any CVV
-          </p>
-        </div>
-      )}
     </form>
+  );
+}
+
+export default function PaymentForm(props: PaymentFormProps) {
+  return (
+    <Elements stripe={stripePromise}>
+      <PaymentFormInner {...props} />
+    </Elements>
   );
 }

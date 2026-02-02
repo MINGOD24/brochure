@@ -1,20 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
+import Stripe from "stripe";
 
-// Authorize.net SDK
-const ApiContracts = require("authorizenet").APIContracts;
-const ApiControllers = require("authorizenet").APIControllers;
-const SDKConstants = require("authorizenet").Constants;
-
-// Get credentials from environment variables
-const API_LOGIN_ID = process.env.AUTHORIZE_NET_API_LOGIN_ID;
-const TRANSACTION_KEY = process.env.AUTHORIZE_NET_TRANSACTION_KEY;
-const IS_SANDBOX = process.env.AUTHORIZE_NET_ENVIRONMENT !== "production";
+// Initialize Stripe with secret key from environment variables
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "");
 
 interface PaymentRequest {
   amount: number;
-  cardNumber: string;
-  expirationDate: string; // Format: "MMYY" or "MM/YY"
-  cardCode: string; // CVV
+  paymentMethodId: string;
   firstName: string;
   lastName: string;
   email: string;
@@ -28,9 +20,10 @@ export async function POST(request: NextRequest) {
     // Validate required fields
     if (
       !body.amount ||
-      !body.cardNumber ||
-      !body.expirationDate ||
-      !body.cardCode
+      !body.paymentMethodId ||
+      !body.email ||
+      !body.firstName ||
+      !body.lastName
     ) {
       return NextResponse.json(
         { success: false, error: "Missing required payment fields" },
@@ -38,156 +31,80 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (!API_LOGIN_ID || !TRANSACTION_KEY) {
-      console.error("Authorize.net credentials not configured");
+    if (!process.env.STRIPE_SECRET_KEY) {
+      console.error("Stripe secret key not configured");
       return NextResponse.json(
         { success: false, error: "Payment system not configured" },
         { status: 500 }
       );
     }
 
-    // Create merchant authentication
-    const merchantAuthentication =
-      new ApiContracts.MerchantAuthenticationType();
-    merchantAuthentication.setName(API_LOGIN_ID);
-    merchantAuthentication.setTransactionKey(TRANSACTION_KEY);
+    // Convert amount to cents (Stripe uses smallest currency unit)
+    const amountInCents = Math.round(body.amount * 100);
 
-    // Create credit card payment type
-    const creditCard = new ApiContracts.CreditCardType();
-    creditCard.setCardNumber(body.cardNumber.replace(/\s/g, "")); // Remove spaces
-    creditCard.setExpirationDate(body.expirationDate.replace("/", "")); // Format: MMYY
-    creditCard.setCardCode(body.cardCode);
+    // Create a Payment Intent
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount: amountInCents,
+      currency: "usd",
+      payment_method: body.paymentMethodId,
+      confirmation_method: "manual",
+      confirm: true,
+      description: body.description || "JHEA Donation/Course Payment",
+      receipt_email: body.email,
+      metadata: {
+        firstName: body.firstName,
+        lastName: body.lastName,
+        email: body.email,
+      },
+    });
 
-    const paymentType = new ApiContracts.PaymentType();
-    paymentType.setCreditCard(creditCard);
-
-    // Create order information
-    const orderDetails = new ApiContracts.OrderType();
-    orderDetails.setInvoiceNumber(`INV-${Date.now()}`);
-    orderDetails.setDescription(
-      body.description || "JHEA Donation/Course Payment"
-    );
-
-    // Create customer information
-    const customerData = new ApiContracts.CustomerDataType();
-    customerData.setType(ApiContracts.CustomerTypeEnum.INDIVIDUAL);
-    customerData.setEmail(body.email);
-
-    // Create billing address
-    const billTo = new ApiContracts.CustomerAddressType();
-    billTo.setFirstName(body.firstName);
-    billTo.setLastName(body.lastName);
-
-    // Create transaction request
-    const transactionRequestType = new ApiContracts.TransactionRequestType();
-    transactionRequestType.setTransactionType(
-      ApiContracts.TransactionTypeEnum.AUTHCAPTURETRANSACTION
-    );
-    transactionRequestType.setPayment(paymentType);
-    transactionRequestType.setAmount(body.amount.toFixed(2));
-    transactionRequestType.setOrder(orderDetails);
-    transactionRequestType.setCustomer(customerData);
-    transactionRequestType.setBillTo(billTo);
-
-    // Create the API request
-    const createRequest = new ApiContracts.CreateTransactionRequest();
-    createRequest.setMerchantAuthentication(merchantAuthentication);
-    createRequest.setTransactionRequest(transactionRequestType);
-
-    // Execute the transaction
-    const controller = new ApiControllers.CreateTransactionController(
-      createRequest.getJSON()
-    );
-
-    // Set environment (sandbox or production)
-    if (IS_SANDBOX) {
-      controller.setEnvironment(SDKConstants.endpoint.sandbox);
-    } else {
-      controller.setEnvironment(SDKConstants.endpoint.production);
+    // Check if payment requires additional action (3D Secure, etc.)
+    if (paymentIntent.status === "requires_action") {
+      return NextResponse.json({
+        success: false,
+        requiresAction: true,
+        clientSecret: paymentIntent.client_secret,
+        error: "Additional authentication required",
+      });
     }
 
-    // Return a promise-based response
-    return new Promise<NextResponse>((resolve) => {
-      controller.execute(() => {
-        const apiResponse = controller.getResponse();
-        const response = new ApiContracts.CreateTransactionResponse(
-          apiResponse
-        );
-
-        if (response !== null) {
-          if (
-            response.getMessages().getResultCode() ===
-            ApiContracts.MessageTypeEnum.OK
-          ) {
-            const transactionResponse = response.getTransactionResponse();
-
-            if (transactionResponse.getMessages() !== null) {
-              resolve(
-                NextResponse.json({
-                  success: true,
-                  transactionId: transactionResponse.getTransId(),
-                  authCode: transactionResponse.getAuthCode(),
-                  message: transactionResponse
-                    .getMessages()
-                    .getMessage()[0]
-                    .getDescription(),
-                })
-              );
-            } else {
-              const errors = transactionResponse.getErrors();
-              resolve(
-                NextResponse.json(
-                  {
-                    success: false,
-                    error: errors
-                      ? errors.getError()[0].getErrorText()
-                      : "Transaction failed",
-                  },
-                  { status: 400 }
-                )
-              );
-            }
-          } else {
-            const transactionResponse = response.getTransactionResponse();
-            if (transactionResponse && transactionResponse.getErrors()) {
-              resolve(
-                NextResponse.json(
-                  {
-                    success: false,
-                    error: transactionResponse
-                      .getErrors()
-                      .getError()[0]
-                      .getErrorText(),
-                  },
-                  { status: 400 }
-                )
-              );
-            } else {
-              resolve(
-                NextResponse.json(
-                  {
-                    success: false,
-                    error: response.getMessages().getMessage()[0].getText(),
-                  },
-                  { status: 400 }
-                )
-              );
-            }
-          }
-        } else {
-          resolve(
-            NextResponse.json(
-              { success: false, error: "No response from payment gateway" },
-              { status: 500 }
-            )
-          );
-        }
+    // Check if payment succeeded
+    if (paymentIntent.status === "succeeded") {
+      return NextResponse.json({
+        success: true,
+        transactionId: paymentIntent.id,
+        paymentIntentId: paymentIntent.id,
+        message: "Payment successful",
       });
-    });
+    }
+
+    // Payment failed or is in an unexpected state
+    return NextResponse.json(
+      {
+        success: false,
+        error: `Payment failed with status: ${paymentIntent.status}`,
+      },
+      { status: 400 }
+    );
   } catch (error) {
     console.error("Payment processing error:", error);
+
+    // Handle Stripe-specific errors
+    if (error instanceof Stripe.errors.StripeError) {
+      return NextResponse.json(
+        { success: false, error: error.message },
+        { status: 400 }
+      );
+    }
+
+    const errorMessage =
+      error instanceof Error ? error.message : "Payment processing failed";
+
     return NextResponse.json(
-      { success: false, error: "Payment processing failed" },
+      {
+        success: false,
+        error: errorMessage,
+      },
       { status: 500 }
     );
   }
