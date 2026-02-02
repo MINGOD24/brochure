@@ -27,7 +27,7 @@ export async function POST(request: NextRequest) {
     ) {
       return NextResponse.json(
         { success: false, error: "Missing required payment fields" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -35,7 +35,7 @@ export async function POST(request: NextRequest) {
       console.error("Stripe secret key not configured");
       return NextResponse.json(
         { success: false, error: "Payment system not configured" },
-        { status: 500 }
+        { status: 500 },
       );
     }
 
@@ -47,8 +47,11 @@ export async function POST(request: NextRequest) {
       amount: amountInCents,
       currency: "usd",
       payment_method: body.paymentMethodId,
-      confirmation_method: "manual",
       confirm: true,
+      automatic_payment_methods: {
+        enabled: true,
+        allow_redirects: "never",
+      },
       description: body.description || "JHEA Donation/Course Payment",
       receipt_email: body.email,
       metadata: {
@@ -84,7 +87,7 @@ export async function POST(request: NextRequest) {
         success: false,
         error: `Payment failed with status: ${paymentIntent.status}`,
       },
-      { status: 400 }
+      { status: 400 },
     );
   } catch (error) {
     console.error("Payment processing error:", error);
@@ -93,7 +96,7 @@ export async function POST(request: NextRequest) {
     if (error instanceof Stripe.errors.StripeError) {
       return NextResponse.json(
         { success: false, error: error.message },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -105,7 +108,7 @@ export async function POST(request: NextRequest) {
         success: false,
         error: errorMessage,
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
