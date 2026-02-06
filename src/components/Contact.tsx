@@ -90,10 +90,10 @@ export default function Contact({
           </p>
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-12">
+        <div className="grid lg:grid-cols-2 gap-12 max-w-lg mx-auto lg:max-w-none">
           {/* Contact Form */}
           <div className="bg-white rounded-lg shadow-xl p-8 md:p-10">
-            <h3 className="text-2xl font-semibold text-[var(--color-navy)] mb-6">
+            <h3 className="text-2xl font-semibold text-[var(--color-navy)] mb-6 text-center lg:text-left">
               Send Us a Message
             </h3>
 
@@ -230,7 +230,7 @@ export default function Contact({
           <div className="space-y-8">
             {/* Direct Contact Card */}
             <div className="bg-[var(--color-navy)] rounded-lg p-8 text-[var(--color-cream)]">
-              <h3 className="text-2xl font-semibold mb-6">
+              <h3 className="text-2xl font-semibold mb-6 text-center lg:text-left">
                 Contact Information
               </h3>
 
@@ -331,7 +331,7 @@ export default function Contact({
 
             {/* Partnership Types */}
             <div className="bg-white rounded-lg p-8 shadow-lg">
-              <h3 className="text-xl font-semibold text-[var(--color-navy)] mb-6">
+              <h3 className="text-xl font-semibold text-[var(--color-navy)] mb-6 text-center lg:text-left">
                 Ways to Partner
               </h3>
 
