@@ -86,6 +86,7 @@ export interface Course {
   format: string;
   image?: StrapiImage;
   order: number;
+  learnMoreUrl?: string;
 }
 
 export interface ContactInfo {

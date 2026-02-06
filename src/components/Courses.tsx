@@ -7,6 +7,7 @@ interface Course {
   duration: string;
   format: string;
   imageUrl?: string | null;
+  learnMoreUrl?: string | null;
 }
 
 interface CoursesProps {
@@ -99,7 +100,9 @@ export default function Courses({ courses }: CoursesProps) {
                   </div>
 
                   <Link
-                    href="#contact"
+                    href={course.learnMoreUrl || "#contact"}
+                    target={course.learnMoreUrl ? "_blank" : undefined}
+                    rel={course.learnMoreUrl ? "noopener noreferrer" : undefined}
                     className="text-[var(--color-navy)] font-medium text-sm hover:text-[var(--color-navy-light)] transition-colors flex items-center gap-1 font-bold"
                   >
                     Learn More

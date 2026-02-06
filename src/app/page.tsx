@@ -78,14 +78,23 @@ export default async function Home() {
             duration: c.duration || "",
             format: c.format || "",
             imageUrl: getStrapiImageUrl(c.image),
+            learnMoreUrl: c.learnMoreUrl || null,
           }))
-      : fallbackContent.courses.map((c) => ({ ...c, imageUrl: null }));
+      : fallbackContent.courses.map((c) => ({
+          ...c,
+          imageUrl: null,
+          learnMoreUrl: null,
+        }));
 
   // Use fallback if mapping resulted in empty array
   const finalCourses =
     courses.length > 0
       ? courses
-      : fallbackContent.courses.map((c) => ({ ...c, imageUrl: null }));
+      : fallbackContent.courses.map((c) => ({
+          ...c,
+          imageUrl: null,
+          learnMoreUrl: null,
+        }));
 
   const about = aboutData || fallbackContent.about;
   const contact = contactData || fallbackContent.contact;
@@ -136,7 +145,7 @@ export default async function Home() {
         points={
           "points" in mission && Array.isArray(mission.points)
             ? mission.points.map((p: { text?: string } | string) =>
-                typeof p === "string" ? p : p.text || ""
+                typeof p === "string" ? p : p.text || "",
               )
             : fallbackContent.mission.points
         }
@@ -154,7 +163,7 @@ export default async function Home() {
         achievements={
           "achievements" in about && Array.isArray(about.achievements)
             ? about.achievements.map((a: { text?: string } | string) =>
-                typeof a === "string" ? a : a.text || ""
+                typeof a === "string" ? a : a.text || "",
               )
             : fallbackContent.about.achievements
         }
