@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 
 interface Projection {
@@ -119,16 +118,20 @@ export default function Projections({ projections }: ProjectionsProps) {
             {/* Content */}
             <div className="relative z-10 text-center">
               <div className="mb-8">
-                <Image
-                  src="/LOGO2.svg"
-                  alt=""
-                  width={200}
-                  height={200}
-                  className="mx-auto object-contain"
+                <div
+                  className="mx-auto w-[200px] h-[50px]"
                   style={{
-                    filter:
-                      "brightness(0) saturate(100%) invert(24%) sepia(89%) saturate(1790%) hue-rotate(212deg) brightness(92%) contrast(96%)",
+                    backgroundColor: "var(--color-navy)",
+                    maskImage: "url(/LOGO2.svg)",
+                    maskSize: "contain",
+                    maskRepeat: "no-repeat",
+                    maskPosition: "center",
+                    WebkitMaskImage: "url(/LOGO2.svg)",
+                    WebkitMaskSize: "contain",
+                    WebkitMaskRepeat: "no-repeat",
+                    WebkitMaskPosition: "center",
                   }}
+                  aria-hidden="true"
                 />
               </div>
 

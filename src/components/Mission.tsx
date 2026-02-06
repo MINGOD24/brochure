@@ -18,10 +18,11 @@ export default function Mission({ title, description, points }: MissionProps) {
           <div>
             {/* Section Label */}
             <div className="flex items-center gap-4 mb-6">
-              <div className="h-px w-12 bg-[var(--color-white)]" />
-              <span className="text-[var(--color-white)] uppercase tracking-[0.2em] text-sm font-medium font-bold">
+              <div className="h-px w-12 bg-[var(--color-navy)]" />
+              <span className="text-[var(--color-navy)] uppercase tracking-[0.2em] text-sm font-bold">
                 Our Purpose
               </span>
+              <div className="h-px w-12 bg-[var(--color-navy)]" />
             </div>
 
             {/* Title */}

@@ -53,6 +53,13 @@ export const metadata: Metadata = {
       "Bringing memory to life through exhibitions, educational materials, and partnerships across North America.",
     type: "website",
     locale: "en_US",
+    images: [
+      {
+        url: "/LOGO.svg",
+        width: 100,
+        height: 100,
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",

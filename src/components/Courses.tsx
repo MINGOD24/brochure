@@ -24,19 +24,19 @@ export default function Courses({ courses }: CoursesProps) {
         {/* Section Header */}
         <div className="text-center mb-16">
           <div className="flex items-center justify-center gap-4 mb-6">
-            <div className="h-px w-12 bg-[var(--color-white)]" />
-            <span className="text-[var(--color-white)] uppercase tracking-[0.2em] text-sm font-medium font-bold">
+            <div className="h-px w-12 bg-[var(--color-navy)]" />
+            <span className="text-[var(--color-navy)] uppercase tracking-[0.2em] text-sm font-bold">
               Educational Programs
             </span>
-            <div className="h-px w-12 bg-[var(--color-gold)]" />
+            <div className="h-px w-12 bg-[var(--color-navy)]" />
           </div>
 
           <h2 className="text-4xl md:text-5xl font-semibold text-[var(--color-navy)] mb-4">
-            Our Courses
+            Our Programs
           </h2>
 
           <p className="text-lg text-[var(--color-text-muted)] max-w-2xl mx-auto">
-            Comprehensive educational programs designed to preserve memory,
+            Comprehensive educational material designed to preserve memory,
             build understanding, and combat hate through knowledge.
           </p>
         </div>
