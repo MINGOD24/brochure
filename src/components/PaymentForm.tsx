@@ -42,6 +42,7 @@ function PaymentFormInner({
     firstName: "",
     lastName: "",
     email: "",
+    paymentType: "one-time" as "one-time" | "recurring",
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -106,6 +107,7 @@ function PaymentFormInner({
           lastName: formData.lastName,
           email: formData.email,
           description,
+          paymentType: formData.paymentType,
         }),
       });
 
@@ -113,8 +115,8 @@ function PaymentFormInner({
 
       if (data.success) {
         setSuccess(true);
-        setTransactionId(data.transactionId);
-        onSuccess?.(data.transactionId);
+        setTransactionId(data.transactionId || data.subscriptionId);
+        onSuccess?.(data.transactionId || data.subscriptionId);
       } else if (data.requiresAction && data.clientSecret) {
         // Handle 3D Secure or other additional authentication
         const { error: confirmError } = await stripe.confirmCardPayment(
@@ -127,8 +129,10 @@ function PaymentFormInner({
         } else {
           // Payment succeeded after authentication
           setSuccess(true);
-          setTransactionId(data.paymentIntentId);
-          onSuccess?.(data.paymentIntentId);
+          const txId =
+            data.subscriptionId || data.paymentIntentId || "confirmed";
+          setTransactionId(txId);
+          onSuccess?.(txId);
         }
       } else {
         setError(data.error || "Payment failed");
@@ -162,18 +166,26 @@ function PaymentFormInner({
   };
 
   if (success) {
+    const isRecurring = formData.paymentType === "recurring";
     return (
       <div className="bg-green-50 border border-green-200 rounded-lg p-8 text-center">
         <div className="text-green-600 text-5xl mb-4">✓</div>
         <h3 className="text-2xl font-semibold text-green-800 mb-2">
-          Payment Successful!
+          {isRecurring ? "Subscription Created!" : "Payment Successful!"}
         </h3>
         <p className="text-green-700 mb-2">
-          Thank you for your generous contribution.
+          {isRecurring
+            ? "Thank you! Your monthly donation has been set up."
+            : "Thank you for your generous contribution."}
         </p>
         <p className="text-sm text-green-600">
-          Transaction ID: {transactionId}
+          {isRecurring ? "Subscription" : "Transaction"} ID: {transactionId}
         </p>
+        {isRecurring && (
+          <p className="text-xs text-green-500 mt-2">
+            You can manage or cancel your subscription anytime.
+          </p>
+        )}
       </div>
     );
   }
@@ -186,10 +198,50 @@ function PaymentFormInner({
         </div>
       )}
 
+      {/* Payment Type Toggle */}
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-2">
+          Payment Type *
+        </label>
+        <div className="grid grid-cols-2 gap-3">
+          <button
+            type="button"
+            onClick={() =>
+              setFormData((prev) => ({ ...prev, paymentType: "one-time" }))
+            }
+            className={`py-3 px-4 rounded-lg border-2 transition-all duration-200 font-medium ${
+              formData.paymentType === "one-time"
+                ? "border-[var(--color-navy)] bg-[var(--color-navy)] text-white"
+                : "border-gray-300 bg-white text-gray-700 hover:border-gray-400"
+            }`}
+          >
+            One-Time
+          </button>
+          <button
+            type="button"
+            onClick={() =>
+              setFormData((prev) => ({ ...prev, paymentType: "recurring" }))
+            }
+            className={`py-3 px-4 rounded-lg border-2 transition-all duration-200 font-medium ${
+              formData.paymentType === "recurring"
+                ? "border-[var(--color-navy)] bg-[var(--color-navy)] text-white"
+                : "border-gray-300 bg-white text-gray-700 hover:border-gray-400"
+            }`}
+          >
+            Monthly
+          </button>
+        </div>
+        {formData.paymentType === "recurring" && (
+          <p className="mt-2 text-sm text-gray-500">
+            You will be charged monthly. You can cancel anytime.
+          </p>
+        )}
+      </div>
+
       {/* Amount */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
-          Amount (USD) *
+          Amount (USD) {formData.paymentType === "recurring" && "/ month"} *
         </label>
         <div className="relative">
           <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">
@@ -331,7 +383,9 @@ function PaymentFormInner({
                 d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
               />
             </svg>
-            Complete Donation — ${formData.amount || "0.00"}
+            {formData.paymentType === "recurring"
+              ? `Start Monthly Donation — $${formData.amount || "0.00"}/mo`
+              : `Complete Donation — $${formData.amount || "0.00"}`}
           </span>
         )}
       </button>

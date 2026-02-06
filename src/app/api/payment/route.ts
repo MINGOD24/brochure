@@ -11,6 +11,7 @@ interface PaymentRequest {
   lastName: string;
   email: string;
   description?: string;
+  paymentType?: "one-time" | "recurring";
 }
 
 export async function POST(request: NextRequest) {
@@ -41,8 +42,105 @@ export async function POST(request: NextRequest) {
 
     // Convert amount to cents (Stripe uses smallest currency unit)
     const amountInCents = Math.round(body.amount * 100);
+    const isRecurring = body.paymentType === "recurring";
 
-    // Create a Payment Intent
+    if (isRecurring) {
+      // Create or retrieve a Stripe Customer
+      const customer = await stripe.customers.create({
+        email: body.email,
+        name: `${body.firstName} ${body.lastName}`,
+        payment_method: body.paymentMethodId,
+        invoice_settings: {
+          default_payment_method: body.paymentMethodId,
+        },
+        metadata: {
+          firstName: body.firstName,
+          lastName: body.lastName,
+        },
+      });
+
+      // First, create an ad-hoc price for the dynamic amount
+      const price = await stripe.prices.create({
+        currency: "usd",
+        unit_amount: amountInCents,
+        recurring: {
+          interval: "month",
+        },
+        product_data: {
+          name: body.description || "JHEA Monthly Donation",
+        },
+      });
+
+      // Create a subscription with the dynamic price
+      const subscription = await stripe.subscriptions.create({
+        customer: customer.id,
+        items: [{ price: price.id }],
+        payment_behavior: "default_incomplete",
+        payment_settings: {
+          save_default_payment_method: "on_subscription",
+          payment_method_types: ["card"],
+        },
+        expand: ["latest_invoice.payment_intent"],
+        metadata: {
+          firstName: body.firstName,
+          lastName: body.lastName,
+          email: body.email,
+        },
+      });
+
+      const invoice = subscription.latest_invoice as Stripe.Invoice;
+      const paymentIntent = invoice.payment_intent as Stripe.PaymentIntent;
+
+      // Check if subscription is active (payment succeeded immediately)
+      if (
+        subscription.status === "active" ||
+        subscription.status === "trialing"
+      ) {
+        return NextResponse.json({
+          success: true,
+          transactionId: subscription.id,
+          subscriptionId: subscription.id,
+          message: "Subscription created successfully",
+        });
+      }
+
+      // Handle incomplete subscription - needs payment confirmation
+      if (
+        subscription.status === "incomplete" &&
+        paymentIntent?.client_secret
+      ) {
+        // Payment needs to be confirmed by the frontend
+        return NextResponse.json({
+          success: false,
+          requiresAction: true,
+          clientSecret: paymentIntent.client_secret,
+          subscriptionId: subscription.id,
+          paymentIntentId: paymentIntent.id,
+          error: "Payment confirmation required",
+        });
+      }
+
+      // Handle declined payment
+      if (paymentIntent?.status === "requires_payment_method") {
+        return NextResponse.json(
+          {
+            success: false,
+            error: "Payment method declined. Please try a different card.",
+          },
+          { status: 400 },
+        );
+      }
+
+      return NextResponse.json(
+        {
+          success: false,
+          error: `Subscription creation failed with status: ${subscription.status}`,
+        },
+        { status: 400 },
+      );
+    }
+
+    // One-time payment flow
     const paymentIntent = await stripe.paymentIntents.create({
       amount: amountInCents,
       currency: "usd",
