@@ -33,7 +33,7 @@ const amina = localFont({
 export const metadata: Metadata = {
   title: "Jewish Heritage Education and Advocacy Center | JHEA",
   icons: {
-    icon: "/LOGO.svg",
+    icon: "/favicon.svg",
   },
   description:
     "Based in Florida, the Jewish Heritage Education and Advocacy Center carries the message of the Jewish Museum of Chile across North America. We combat antisemitism and celebrate Jewish heritage through education.",
