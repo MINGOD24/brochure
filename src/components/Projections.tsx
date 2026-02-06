@@ -1,8 +1,12 @@
+import Image from "next/image";
+import Link from "next/link";
+
 interface Projection {
   id: number;
   title: string;
   description: string;
   year: string;
+  link?: string;
 }
 
 interface ProjectionsProps {
@@ -45,51 +49,106 @@ export default function Projections({ projections }: ProjectionsProps) {
 
         {/* Projections Grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {projections.map((projection, index) => (
-            <div
-              key={projection.id}
-              className="card-hover bg-[var(--color-navy-light)]/50 backdrop-blur-sm border border-[var(--color-white)]/20 rounded-lg p-8 relative overflow-hidden group"
-            >
-              {/* Number indicator */}
-              <div className="absolute top-4 right-4 text-6xl font-bold text-[var(--color-white)]/10 group-hover:text-[var(--color-white)]/20 transition-colors">
-                {String(index + 1).padStart(2, "0")}
+          {projections.map((projection, index) => {
+            const cardContent = (
+              <>
+                {/* Number indicator */}
+                <div className="absolute top-4 right-4 text-6xl font-bold text-[var(--color-white)]/10 group-hover:text-[var(--color-white)]/20 transition-colors">
+                  {String(index + 1).padStart(2, "0")}
+                </div>
+
+                {/* Icon */}
+                <div className="w-12 h-12 rounded-full bg-[var(--color-white)]/10 border border-[var(--color-white)]/30 flex items-center justify-center mb-6 group-hover:bg-[var(--color-white)]/20 transition-colors">
+                  <ProjectionIcon index={index} />
+                </div>
+
+                {/* Content */}
+                <h3 className="text-xl font-semibold text-[var(--color-cream)] mb-3">
+                  {projection.title}
+                </h3>
+
+                <p className="text-[var(--color-cream)]/70 mb-4 leading-relaxed">
+                  {projection.description}
+                </p>
+
+                {/* Bottom accent line */}
+                <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[var(--color-white)] to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+              </>
+            );
+
+            const cardClassName =
+              "card-hover bg-[var(--color-navy-light)]/50 backdrop-blur-sm border border-[var(--color-white)]/20 rounded-lg p-8 relative overflow-hidden group";
+
+            return projection.link ? (
+              <Link
+                key={projection.id}
+                href={projection.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`${cardClassName} cursor-pointer`}
+              >
+                {cardContent}
+              </Link>
+            ) : (
+              <div key={projection.id} className={cardClassName}>
+                {cardContent}
               </div>
+            );
+          })}
+        </div>
 
-              {/* Icon */}
-              <div className="w-12 h-12 rounded-full bg-[var(--color-white)]/10 border border-[var(--color-white)]/30 flex items-center justify-center mb-6 group-hover:bg-[var(--color-white)]/20 transition-colors">
-                <ProjectionIcon index={index} />
-              </div>
-
-              {/* Content */}
-              <h3 className="text-xl font-semibold text-[var(--color-cream)] mb-3">
-                {projection.title}
-              </h3>
-
-              <p className="text-[var(--color-cream)]/70 mb-4 leading-relaxed">
-                {projection.description}
-              </p>
-
-              <div className="flex items-center gap-2 text-[var(--color-white)] text-sm font-bold">
-                <svg
-                  className="w-4 h-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-                  />
-                </svg>
-                <span>{projection.year}</span>
-              </div>
-
-              {/* Bottom accent line */}
-              <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[var(--color-white)] to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+        {/* Quote Card */}
+        <div className="mt-16 max-w-2xl mx-auto">
+          <div className="bg-[var(--color-cream)] rounded-lg p-12 relative overflow-hidden">
+            {/* Pattern overlay */}
+            <div className="absolute inset-0 opacity-5">
+              <svg
+                width="100%"
+                height="100%"
+                viewBox="0 0 100 100"
+                preserveAspectRatio="none"
+              >
+                <rect
+                  width="100%"
+                  height="100%"
+                  fill="url(#projections-pattern)"
+                />
+              </svg>
             </div>
-          ))}
+
+            {/* Content */}
+            <div className="relative z-10 text-center">
+              <div className="mb-8">
+                <Image
+                  src="/LOGO2.svg"
+                  alt=""
+                  width={200}
+                  height={200}
+                  className="mx-auto object-contain"
+                  style={{
+                    filter:
+                      "brightness(0) saturate(100%) invert(24%) sepia(89%) saturate(1790%) hue-rotate(212deg) brightness(92%) contrast(96%)",
+                  }}
+                />
+              </div>
+
+              <blockquote className="text-2xl md:text-3xl text-[var(--color-navy)] italic mb-6">
+                &ldquo;Fighting hatred and prejudice through education&rdquo;
+              </blockquote>
+
+              <div className="h-px w-24 mx-auto mb-6 bg-gradient-to-r from-transparent via-[var(--color-navy)] to-transparent" />
+
+              <p className="text-[var(--color-navy)] uppercase tracking-widest text-sm font-bold">
+                Our Commitment
+              </p>
+            </div>
+
+            {/* Corner decorations */}
+            <div className="absolute top-4 left-4 w-8 h-8 border-l-2 border-t-2 border-[var(--color-navy)]/30" />
+            <div className="absolute top-4 right-4 w-8 h-8 border-r-2 border-t-2 border-[var(--color-navy)]/30" />
+            <div className="absolute bottom-4 left-4 w-8 h-8 border-l-2 border-b-2 border-[var(--color-navy)]/30" />
+            <div className="absolute bottom-4 right-4 w-8 h-8 border-r-2 border-b-2 border-[var(--color-navy)]/30" />
+          </div>
         </div>
       </div>
     </section>

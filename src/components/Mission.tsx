@@ -70,19 +70,6 @@ export default function Mission({ title, description, points }: MissionProps) {
                   viewBox="0 0 100 100"
                   preserveAspectRatio="none"
                 >
-                  <pattern
-                    id="mission-pattern"
-                    x="0"
-                    y="0"
-                    width="20"
-                    height="20"
-                    patternUnits="userSpaceOnUse"
-                  >
-                    <polygon
-                      points="10,1 12,7 19,7 14,11 16,18 10,14 4,18 6,11 1,7 8,7"
-                      fill="var(--color-white)"
-                    />
-                  </pattern>
                   <rect
                     width="100%"
                     height="100%"
@@ -110,7 +97,7 @@ export default function Mission({ title, description, points }: MissionProps) {
                 <div className="separator-gold w-24 mx-auto mb-6" />
 
                 <p className="text-[var(--color-white)] uppercase tracking-widest text-sm font-bold">
-                  Since 2020
+                  Since 2025
                 </p>
               </div>
 

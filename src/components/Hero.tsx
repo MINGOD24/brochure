@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Image from "next/image";
 
 // Helper function to parse markdown bold (**text**) to React elements
 function parseMarkdown(text: string) {
@@ -50,26 +49,6 @@ export default function Hero({
         {/* Gradient Overlays */}
         <div className="absolute inset-0 bg-gradient-to-b from-[var(--color-navy)] via-transparent to-[var(--color-navy)]" />
         <div className="absolute inset-0 bg-gradient-to-r from-[var(--color-navy)]/80 via-transparent to-[var(--color-navy)]/80" />
-      </div>
-
-      {/* Decorative Elements */}
-      <div className="absolute top-20 left-10 opacity-10">
-        <Image
-          src="/LOGO2.svg"
-          alt=""
-          width={200}
-          height={200}
-          className="object-contain"
-        />
-      </div>
-      <div className="absolute bottom-20 right-10 opacity-10">
-        <Image
-          src="/LOGO2.svg"
-          alt=""
-          width={200}
-          height={200}
-          className="object-contain"
-        />
       </div>
 
       {/* Content */}
