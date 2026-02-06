@@ -44,7 +44,7 @@ export default function About({
           <div className="relative">
             <div className="relative rounded-lg overflow-hidden shadow-2xl">
               {imageUrl ? (
-                <div className="aspect-[4/5] bg-[var(--color-navy-light)] relative">
+                <div className="aspect-[3/4] md:aspect-[4/5] bg-[var(--color-navy-light)] relative">
                   <Image
                     src={imageUrl}
                     alt={name}

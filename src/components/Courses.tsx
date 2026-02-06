@@ -44,9 +44,12 @@ export default function Courses({ courses }: CoursesProps) {
         {/* Courses Grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {courses.map((course, index) => (
-            <div
+            <Link
               key={course.id}
-              className="card-hover bg-white rounded-lg overflow-hidden shadow-lg group"
+              href={course.learnMoreUrl || "#contact"}
+              target={course.learnMoreUrl ? "_blank" : undefined}
+              rel={course.learnMoreUrl ? "noopener noreferrer" : undefined}
+              className="card-hover bg-white rounded-lg overflow-hidden shadow-lg group flex flex-col cursor-pointer"
             >
               {/* Image placeholder or actual image */}
               <div className="relative h-48 bg-[var(--color-navy)] overflow-hidden">
@@ -71,12 +74,12 @@ export default function Courses({ courses }: CoursesProps) {
               </div>
 
               {/* Content */}
-              <div className="p-6">
+              <div className="p-6 flex flex-col flex-grow">
                 <h3 className="text-xl font-semibold text-[var(--color-navy)] mb-3 group-hover:text-[var(--color-navy-light)] transition-colors">
                   {course.title}
                 </h3>
 
-                <p className="text-[var(--color-text-muted)] mb-4 leading-relaxed">
+                <p className="text-[var(--color-text-muted)] mb-4 leading-relaxed flex-grow">
                   {course.description}
                 </p>
 
@@ -99,12 +102,7 @@ export default function Courses({ courses }: CoursesProps) {
                     <span>{course.duration}</span>
                   </div>
 
-                  <Link
-                    href={course.learnMoreUrl || "#contact"}
-                    target={course.learnMoreUrl ? "_blank" : undefined}
-                    rel={course.learnMoreUrl ? "noopener noreferrer" : undefined}
-                    className="text-[var(--color-navy)] font-medium text-sm hover:text-[var(--color-navy-light)] transition-colors flex items-center gap-1 font-bold"
-                  >
+                  <span className="text-[var(--color-navy)] font-bold text-sm group-hover:text-[var(--color-navy-light)] transition-colors flex items-center gap-1">
                     Learn More
                     <svg
                       className="w-4 h-4"
@@ -119,10 +117,10 @@ export default function Courses({ courses }: CoursesProps) {
                         d="M9 5l7 7-7 7"
                       />
                     </svg>
-                  </Link>
+                  </span>
                 </div>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
 
