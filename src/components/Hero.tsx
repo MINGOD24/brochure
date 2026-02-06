@@ -83,7 +83,6 @@ export default function Hero({
           <div className="w-3 h-3 rotate-45 border border-[var(--color-white)]" />
           <div className="h-px w-16 bg-[var(--color-white)]" />
         </div>
-
         {/* Subtitle */}
         <p
           className="text-[var(--color-white)] uppercase tracking-[0.3em] text-sm md:text-base mb-4 animate-fade-in-up opacity-0 font-bold"
@@ -91,25 +90,19 @@ export default function Hero({
         >
           {subtitle}
         </p>
-
         {/* Title */}
         <h1
           className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-[var(--color-cream)] mb-8 leading-tight animate-fade-in-up opacity-0 text-center"
           style={{ animationDelay: "0.3s", animationFillMode: "forwards" }}
         >
-          {title.split(" ").map((word, i) => (
-            <span key={i}>
-              {word === "Jewish" ||
-              word === "Heritage" ||
-              word === "Education" ? (
-                <span className="text-gold-gradient">{word} </span>
-              ) : (
-                <span>{word} </span>
-              )}
-            </span>
-          ))}
+          <span className="block">
+            <span className="text-gold-gradient">Jewish Heritage</span>
+          </span>
+          <span className="block">
+            <span className="text-gold-gradient">Education</span> and Advocacy
+          </span>
+          <span className="block font-normal">Center</span>
         </h1>
-
         {/* Description */}
         <p
           className="text-lg md:text-xl text-[var(--color-cream)]/80 max-w-3xl mx-auto mb-12 leading-relaxed animate-fade-in-up opacity-0"
@@ -117,7 +110,6 @@ export default function Hero({
         >
           {parseMarkdown(description)}
         </p>
-
         {/* CTA Buttons */}
         <div
           className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-in-up opacity-0"
@@ -130,7 +122,6 @@ export default function Hero({
             Learn More
           </Link>
         </div>
-
         {/* Scroll Indicator */}
         <div
           className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-fade-in opacity-0"

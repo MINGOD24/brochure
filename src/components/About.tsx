@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 interface AboutProps {
   name: string;
   title: string;
@@ -40,19 +42,23 @@ export default function About({
         <div className="grid lg:grid-cols-2 gap-12 items-start">
           {/* Image Column */}
           <div className="relative">
-            <div className="relative rounded-lg overflow-hidden">
-              <div className="aspect-[4/5] bg-[var(--color-navy-light)] flex items-center justify-center">
-                <div className="text-center">
-                  <div className="w-32 h-32 mx-auto mb-6 rounded-full bg-[var(--color-white)]/20 flex items-center justify-center overflow-hidden">
-                    {imageUrl ? (
-                      <img
-                        src={imageUrl}
-                        alt={name}
-                        className="w-full h-full object-cover object-top rounded-full"
-                      />
-                    ) : (
+            <div className="relative rounded-lg overflow-hidden shadow-2xl">
+              {imageUrl ? (
+                <div className="aspect-[4/5] bg-[var(--color-navy-light)] relative">
+                  <Image
+                    src={imageUrl}
+                    alt={name}
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 50vw"
+                    className="object-cover object-top"
+                  />
+                </div>
+              ) : (
+                <div className="aspect-[4/5] bg-[var(--color-navy-light)] flex items-center justify-center">
+                  <div className="text-center p-8">
+                    <div className="w-48 h-48 mx-auto mb-8 rounded-full bg-[var(--color-white)]/10 flex items-center justify-center">
                       <svg
-                        className="w-16 h-16 text-[var(--color-white)]"
+                        className="w-24 h-24 text-[var(--color-white)]/60"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -60,20 +66,20 @@ export default function About({
                         <path
                           strokeLinecap="round"
                           strokeLinejoin="round"
-                          strokeWidth={1.5}
+                          strokeWidth={1}
                           d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
                         />
                       </svg>
-                    )}
+                    </div>
+                    <p className="text-[var(--color-cream)] text-2xl font-semibold">
+                      {name}
+                    </p>
+                    <p className="text-[var(--color-white)] uppercase tracking-wider text-sm mt-2 font-bold">
+                      {title}
+                    </p>
                   </div>
-                  <p className="text-[var(--color-cream)] text-2xl font-semibold">
-                    {name}
-                  </p>
-                  <p className="text-[var(--color-white)] uppercase tracking-wider text-sm mt-2 font-bold">
-                    {title}
-                  </p>
                 </div>
-              </div>
+              )}
 
               {/* Decorative frame */}
               <div className="absolute -top-4 -left-4 w-full h-full border-2 border-[var(--color-white)]/30 rounded-lg pointer-events-none" />
