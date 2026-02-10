@@ -2,6 +2,9 @@
 // This file handles all communication with Strapi CMS
 // Updated for Strapi v5 flat response structure
 
+import fs from "fs";
+import path from "path";
+
 const STRAPI_URL =
   process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:1337";
 const STRAPI_API_TOKEN = process.env.STRAPI_API_TOKEN;
@@ -136,6 +139,61 @@ export function getStrapiImageUrl(image?: StrapiImage | null): string | null {
   return `${STRAPI_URL}${url}`;
 }
 
+// Persisted cache path (last successful Strapi data for when server is sleeping)
+const CACHE_DIR =
+  process.env.VERCEL === "1"
+    ? "/tmp"
+    : path.join(process.cwd(), ".next", "cache");
+const CACHE_FILE = path.join(CACHE_DIR, "strapi-content-cache.json");
+
+type CacheShape = {
+  hero: HeroContent | null;
+  mission: MissionContent | null;
+  projections: Projection[];
+  courses: Course[];
+  about: AboutContent | null;
+  contact: ContactInfo | null;
+  siteSettings: SiteSettings | null;
+  news: NewsArticle[];
+};
+
+let usedCacheThisRequest = false;
+
+function readPersistedCache(): Partial<CacheShape> | null {
+  try {
+    if (fs.existsSync(CACHE_FILE)) {
+      const raw = fs.readFileSync(CACHE_FILE, "utf-8");
+      return JSON.parse(raw) as Partial<CacheShape>;
+    }
+  } catch (e) {
+    console.warn("Strapi cache read failed:", e);
+  }
+  return null;
+}
+
+function writePersistedCache(key: keyof CacheShape, value: unknown) {
+  try {
+    if (!fs.existsSync(CACHE_DIR)) {
+      fs.mkdirSync(CACHE_DIR, { recursive: true });
+    }
+    const current = readPersistedCache() || {};
+    (current as Record<string, unknown>)[key] = value;
+    fs.writeFileSync(CACHE_FILE, JSON.stringify(current), "utf-8");
+  } catch (e) {
+    console.warn("Strapi cache write failed:", e);
+  }
+}
+
+/** Call at start of page data fetch to reset the "used cache" flag for this request. */
+export function resetStrapiUsedCacheFlag() {
+  usedCacheThisRequest = false;
+}
+
+/** True if any Strapi getter fell back to persisted cache this request (e.g. Strapi was sleeping). */
+export function getStrapiUsedCache() {
+  return usedCacheThisRequest;
+}
+
 // Fetch helper with authentication and timeout
 async function fetchStrapi<T>(
   endpoint: string,
@@ -151,7 +209,7 @@ async function fetchStrapi<T>(
     headers["Authorization"] = `Bearer ${STRAPI_API_TOKEN}`;
   }
 
-  // Create an AbortController with 10 second timeout
+  // Create an AbortController with 10 second timeout (Strapi free tier may be slow to wake)
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), 10000);
 
@@ -160,7 +218,7 @@ async function fetchStrapi<T>(
       ...options,
       headers,
       signal: controller.signal,
-      next: { revalidate: 86400 }, // Revalidate once per day (24 hours)
+      next: { revalidate: 86400 }, // Revalidate once per day when successful
     });
 
     clearTimeout(timeoutId);
@@ -185,61 +243,141 @@ async function fetchStrapi<T>(
   }
 }
 
-// API functions
+// API functions: try Strapi first; on failure use last successful persisted cache
 export async function getHeroContent(): Promise<HeroContent | null> {
   const response = await fetchStrapi<StrapiResponse<HeroContent>>(
     "/hero?populate=*"
   );
-  return response?.data || null;
+  const data = response?.data ?? null;
+  if (data) {
+    writePersistedCache("hero", data);
+    return data;
+  }
+  const cache = readPersistedCache();
+  if (cache?.hero != null) {
+    usedCacheThisRequest = true;
+    return cache.hero;
+  }
+  return null;
 }
 
 export async function getMissionContent(): Promise<MissionContent | null> {
   const response = await fetchStrapi<StrapiResponse<MissionContent>>(
     "/mission?populate=*"
   );
-  return response?.data || null;
+  const data = response?.data ?? null;
+  if (data) {
+    writePersistedCache("mission", data);
+    return data;
+  }
+  const cache = readPersistedCache();
+  if (cache?.mission != null) {
+    usedCacheThisRequest = true;
+    return cache.mission;
+  }
+  return null;
 }
 
 export async function getProjections(): Promise<Projection[]> {
   const response = await fetchStrapi<StrapiResponse<Projection[]>>(
     "/projections?populate=*&sort=order:asc"
   );
-  return response?.data || [];
+  const data = response?.data ?? [];
+  if (data && data.length > 0) {
+    writePersistedCache("projections", data);
+    return data;
+  }
+  const cache = readPersistedCache();
+  if (cache?.projections != null && cache.projections.length > 0) {
+    usedCacheThisRequest = true;
+    return cache.projections;
+  }
+  return [];
 }
 
 export async function getAboutContent(): Promise<AboutContent | null> {
   const response = await fetchStrapi<StrapiResponse<AboutContent>>(
     "/about?populate=*"
   );
-  return response?.data || null;
+  const data = response?.data ?? null;
+  if (data) {
+    writePersistedCache("about", data);
+    return data;
+  }
+  const cache = readPersistedCache();
+  if (cache?.about != null) {
+    usedCacheThisRequest = true;
+    return cache.about;
+  }
+  return null;
 }
 
 export async function getCourses(): Promise<Course[]> {
   const response = await fetchStrapi<StrapiResponse<Course[]>>(
     "/courses?populate=*&sort=order:asc"
   );
-  return response?.data || [];
+  const data = response?.data ?? [];
+  if (data && data.length > 0) {
+    writePersistedCache("courses", data);
+    return data;
+  }
+  const cache = readPersistedCache();
+  if (cache?.courses != null && cache.courses.length > 0) {
+    usedCacheThisRequest = true;
+    return cache.courses;
+  }
+  return [];
 }
 
 export async function getContactInfo(): Promise<ContactInfo | null> {
   const response = await fetchStrapi<StrapiResponse<ContactInfo>>(
     "/contact-info?populate=*"
   );
-  return response?.data || null;
+  const data = response?.data ?? null;
+  if (data) {
+    writePersistedCache("contact", data);
+    return data;
+  }
+  const cache = readPersistedCache();
+  if (cache?.contact != null) {
+    usedCacheThisRequest = true;
+    return cache.contact;
+  }
+  return null;
 }
 
 export async function getSiteSettings(): Promise<SiteSettings | null> {
   const response = await fetchStrapi<StrapiResponse<SiteSettings>>(
     "/global?populate=*"
   );
-  return response?.data || null;
+  const data = response?.data ?? null;
+  if (data) {
+    writePersistedCache("siteSettings", data);
+    return data;
+  }
+  const cache = readPersistedCache();
+  if (cache?.siteSettings != null) {
+    usedCacheThisRequest = true;
+    return cache.siteSettings;
+  }
+  return null;
 }
 
 export async function getNews(): Promise<NewsArticle[]> {
   const response = await fetchStrapi<StrapiResponse<NewsArticle[]>>(
     "/news-articles?populate=*&sort=publishedAt:desc"
   );
-  return response?.data || [];
+  const data = response?.data ?? [];
+  if (data && data.length > 0) {
+    writePersistedCache("news", data);
+    return data;
+  }
+  const cache = readPersistedCache();
+  if (cache?.news != null && cache.news.length > 0) {
+    usedCacheThisRequest = true;
+    return cache.news;
+  }
+  return [];
 }
 
 // Fallback content when Strapi is not available

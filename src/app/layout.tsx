@@ -30,7 +30,12 @@ const amina = localFont({
   display: "swap",
 });
 
+const siteUrl =
+  process.env.NEXT_PUBLIC_SITE_URL ||
+  (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : undefined);
+
 export const metadata: Metadata = {
+  metadataBase: siteUrl ? new URL(siteUrl) : undefined,
   title: "Jewish Heritage Education and Advocacy Center | JHEA",
   icons: {
     icon: "/favicon.svg",
@@ -53,11 +58,14 @@ export const metadata: Metadata = {
       "Bringing memory to life through exhibitions, educational materials, and partnerships across North America.",
     type: "website",
     locale: "en_US",
+    url: siteUrl,
+    siteName: "Jewish Heritage Education and Advocacy Center",
     images: [
       {
         url: "/LOGO.svg",
-        width: 100,
-        height: 100,
+        width: 600,
+        height: 424,
+        alt: "Jewish Heritage Education and Advocacy Center",
       },
     ],
   },
@@ -66,6 +74,7 @@ export const metadata: Metadata = {
     title: "Jewish Heritage Education and Advocacy Center",
     description:
       "Bringing memory to life through exhibitions, educational materials, and partnerships across North America.",
+    images: ["/LOGO.svg"],
   },
 };
 

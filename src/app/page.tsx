@@ -8,6 +8,7 @@ import News from "@/components/News";
 import Donate from "@/components/Donate";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
+import StrapiRetryAfterSleep from "@/components/StrapiRetryAfterSleep";
 import {
   fallbackContent,
   getHeroContent,
@@ -19,12 +20,16 @@ import {
   getSiteSettings,
   getNews,
   getStrapiImageUrl,
+  resetStrapiUsedCacheFlag,
+  getStrapiUsedCache,
 } from "@/lib/strapi";
 
 export const revalidate = 86400; // Revalidate once per day (24 hours)
 
 export default async function Home() {
-  // Fetch all content from Strapi (with fallbacks)
+  resetStrapiUsedCacheFlag();
+
+  // Fetch all content from Strapi (with fallbacks and persisted cache when Strapi is sleeping)
   const [
     heroData,
     missionData,
@@ -121,8 +126,11 @@ export default async function Home() {
       ? news
       : fallbackContent.news.map((n) => ({ ...n, imageUrl: null }));
 
+  const usedStrapiCache = getStrapiUsedCache();
+
   return (
     <main className="min-h-screen">
+      {usedStrapiCache ? <StrapiRetryAfterSleep /> : null}
       <Header
         siteName={settings.siteName}
         logoUrl={siteSettings ? getStrapiImageUrl(siteSettings.logo) : null}
