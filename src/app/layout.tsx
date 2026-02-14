@@ -60,12 +60,21 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: siteUrl,
     siteName: "Jewish Heritage Education and Advocacy Center",
+    images: [
+      {
+        url: "/opengraph-image",
+        width: 1200,
+        height: 630,
+        alt: "Jewish Heritage Education and Advocacy Center",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Jewish Heritage Education and Advocacy Center",
     description:
       "Bringing memory to life through exhibitions, educational materials, and partnerships across North America.",
+    images: ["/opengraph-image"],
   },
 };
 
