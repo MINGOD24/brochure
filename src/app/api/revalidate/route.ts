@@ -1,10 +1,10 @@
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { NextRequest } from "next/server";
 
 /**
  * Revalidate the homepage so the next request refetches from Strapi.
- * Used after Strapi was sleeping: client waits ~4 minutes then calls this
- * so the page is revalidated and Strapi has time to wake up.
+ * Uses revalidateTag to bust the Next.js Data Cache for all Strapi fetches,
+ * plus revalidatePath to bust the Full Route Cache.
  */
 export async function GET(request: NextRequest) {
   const secret = request.nextUrl.searchParams.get("secret");
@@ -14,6 +14,7 @@ export async function GET(request: NextRequest) {
   ) {
     return new Response("Unauthorized", { status: 401 });
   }
+  revalidateTag("strapi", { expire: 0 });
   revalidatePath("/");
   return Response.json({ revalidated: true, now: Date.now() });
 }
@@ -27,6 +28,7 @@ export async function POST(request: NextRequest) {
   ) {
     return new Response("Unauthorized", { status: 401 });
   }
+  revalidateTag("strapi", { expire: 0 });
   revalidatePath("/");
   return Response.json({ revalidated: true, now: Date.now() });
 }

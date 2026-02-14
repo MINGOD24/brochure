@@ -218,7 +218,7 @@ async function fetchStrapi<T>(
       ...options,
       headers,
       signal: controller.signal,
-      next: { revalidate: 86400 }, // Revalidate once per day when successful
+      next: { revalidate: 86400, tags: ["strapi"] },
     });
 
     clearTimeout(timeoutId);
