@@ -16,9 +16,16 @@ export default function OGImage() {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
+        backgroundColor: "#1F3FAE",
       }}
     >
-      <img src={`${baseUrl}/favicon.svg`} width={400} height={400} alt="" />
+      <img
+        src={`${baseUrl}/favicon.svg`}
+        width={1200}
+        height={630}
+        alt=""
+        style={{ objectFit: "cover" }}
+      />
     </div>,
     { ...size },
   );
