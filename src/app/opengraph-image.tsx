@@ -24,7 +24,7 @@ export default function OGImage() {
         width={1200}
         height={630}
         alt=""
-        style={{ objectFit: "cover" }}
+        style={{ objectFit: "contain" }}
       />
     </div>,
     { ...size },
