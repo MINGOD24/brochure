@@ -209,9 +209,9 @@ async function fetchStrapi<T>(
     headers["Authorization"] = `Bearer ${STRAPI_API_TOKEN}`;
   }
 
-  // Create an AbortController with 10 second timeout (Strapi free tier may be slow to wake)
+  // Create an AbortController with 30 second timeout (Strapi free tier may be slow to wake)
   const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 10000);
+  const timeoutId = setTimeout(() => controller.abort(), 30000);
 
   try {
     const response = await fetch(url, {
