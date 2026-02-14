@@ -6,6 +6,10 @@ export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
 export default function OGImage() {
+  const baseUrl = process.env.VERCEL_URL
+    ? `https://${process.env.VERCEL_URL}`
+    : process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+
   return new ImageResponse(
     (
       <div
@@ -13,46 +17,17 @@ export default function OGImage() {
           width: "100%",
           height: "100%",
           display: "flex",
-          flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
           backgroundColor: "#0a192f",
-          color: "#ffffff",
-          fontFamily: "serif",
-          padding: "60px",
-          textAlign: "center",
         }}
       >
-        <div
-          style={{
-            fontSize: 64,
-            fontWeight: 700,
-            lineHeight: 1.2,
-            marginBottom: "20px",
-          }}
-        >
-          Jewish Heritage
-        </div>
-        <div
-          style={{
-            fontSize: 64,
-            fontWeight: 700,
-            lineHeight: 1.2,
-            marginBottom: "20px",
-          }}
-        >
-          Education and Advocacy
-        </div>
-        <div
-          style={{
-            fontSize: 48,
-            fontWeight: 300,
-            lineHeight: 1.2,
-            opacity: 0.9,
-          }}
-        >
-          Center
-        </div>
+        <img
+          src={`${baseUrl}/favicon.svg`}
+          width={400}
+          height={400}
+          alt=""
+        />
       </div>
     ),
     { ...size }
