@@ -127,10 +127,22 @@ function PaymentFormInner({
           setError(confirmError.message || "Payment authentication failed");
           onError?.(confirmError.message || "Payment authentication failed");
         } else {
-          // Payment succeeded after authentication
-          setSuccess(true);
+          // Payment succeeded after authentication — send notification
           const txId =
             data.subscriptionId || data.paymentIntentId || "confirmed";
+          fetch("/api/payment-notification", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              firstName: formData.firstName,
+              lastName: formData.lastName,
+              email: formData.email,
+              amount: parseFloat(formData.amount),
+              paymentType: formData.paymentType,
+              transactionId: txId,
+            }),
+          }).catch(() => {});
+          setSuccess(true);
           setTransactionId(txId);
           onSuccess?.(txId);
         }

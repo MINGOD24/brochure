@@ -14,6 +14,42 @@ interface PaymentRequest {
   paymentType?: "one-time" | "recurring";
 }
 
+async function sendPaymentNotification({
+  firstName,
+  lastName,
+  email,
+  amount,
+  paymentType,
+  transactionId,
+}: {
+  firstName: string;
+  lastName: string;
+  email: string;
+  amount: number;
+  paymentType: string;
+  transactionId: string;
+}) {
+  try {
+    await fetch("https://api.web3forms.com/submit", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        access_key: process.env.NEXT_PUBLIC_WEB3FORMS_KEY,
+        subject: `New ${paymentType === "recurring" ? "Monthly Subscription" : "One-Time Donation"} — $${amount}`,
+        from_name: `${firstName} ${lastName}`,
+        name: `${firstName} ${lastName}`,
+        email,
+        amount: `$${amount}${paymentType === "recurring" ? "/month" : ""}`,
+        payment_type: paymentType === "recurring" ? "Monthly Subscription" : "One-Time Donation",
+        transaction_id: transactionId,
+        message: `${firstName} ${lastName} (${email}) made a ${paymentType === "recurring" ? "monthly subscription" : "one-time donation"} of $${amount}. Transaction ID: ${transactionId}`,
+      }),
+    });
+  } catch (err) {
+    console.error("Failed to send payment notification email:", err);
+  }
+}
+
 export async function POST(request: NextRequest) {
   try {
     const body: PaymentRequest = await request.json();
@@ -96,6 +132,14 @@ export async function POST(request: NextRequest) {
         subscription.status === "active" ||
         subscription.status === "trialing"
       ) {
+        await sendPaymentNotification({
+          firstName: body.firstName,
+          lastName: body.lastName,
+          email: body.email,
+          amount: body.amount,
+          paymentType: "recurring",
+          transactionId: subscription.id,
+        });
         return NextResponse.json({
           success: true,
           transactionId: subscription.id,
@@ -171,6 +215,14 @@ export async function POST(request: NextRequest) {
 
     // Check if payment succeeded
     if (paymentIntent.status === "succeeded") {
+      await sendPaymentNotification({
+        firstName: body.firstName,
+        lastName: body.lastName,
+        email: body.email,
+        amount: body.amount,
+        paymentType: "one-time",
+        transactionId: paymentIntent.id,
+      });
       return NextResponse.json({
         success: true,
         transactionId: paymentIntent.id,
