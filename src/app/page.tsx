@@ -24,7 +24,7 @@ import {
   getStrapiUsedCache,
 } from "@/lib/strapi";
 
-export const revalidate = 86400; // Revalidate once per day (24 hours)
+export const revalidate = 3600; // Revalidate every 3 hours
 
 export default async function Home() {
   resetStrapiUsedCacheFlag();

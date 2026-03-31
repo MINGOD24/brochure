@@ -197,7 +197,7 @@ export function getStrapiUsedCache() {
 // Fetch helper with authentication and timeout
 async function fetchStrapi<T>(
   endpoint: string,
-  options: RequestInit = {}
+  options: RequestInit = {},
 ): Promise<T | null> {
   const url = `${STRAPI_URL}/api${endpoint}`;
 
@@ -218,14 +218,14 @@ async function fetchStrapi<T>(
       ...options,
       headers,
       signal: controller.signal,
-      next: { revalidate: 86400, tags: ["strapi"] },
+      next: { revalidate: 3600, tags: ["strapi"] }, // 30 min
     });
 
     clearTimeout(timeoutId);
 
     if (!response.ok) {
       console.error(
-        `Strapi fetch error: ${response.status} ${response.statusText}`
+        `Strapi fetch error: ${response.status} ${response.statusText}`,
       );
       return null;
     }
@@ -245,9 +245,8 @@ async function fetchStrapi<T>(
 
 // API functions: try Strapi first; on failure use last successful persisted cache
 export async function getHeroContent(): Promise<HeroContent | null> {
-  const response = await fetchStrapi<StrapiResponse<HeroContent>>(
-    "/hero?populate=*"
-  );
+  const response =
+    await fetchStrapi<StrapiResponse<HeroContent>>("/hero?populate=*");
   const data = response?.data ?? null;
   if (data) {
     writePersistedCache("hero", data);
@@ -263,7 +262,7 @@ export async function getHeroContent(): Promise<HeroContent | null> {
 
 export async function getMissionContent(): Promise<MissionContent | null> {
   const response = await fetchStrapi<StrapiResponse<MissionContent>>(
-    "/mission?populate=*"
+    "/mission?populate=*",
   );
   const data = response?.data ?? null;
   if (data) {
@@ -280,7 +279,7 @@ export async function getMissionContent(): Promise<MissionContent | null> {
 
 export async function getProjections(): Promise<Projection[]> {
   const response = await fetchStrapi<StrapiResponse<Projection[]>>(
-    "/projections?populate=*&sort=order:asc"
+    "/projections?populate=*&sort=order:asc",
   );
   const data = response?.data ?? [];
   if (data && data.length > 0) {
@@ -296,9 +295,8 @@ export async function getProjections(): Promise<Projection[]> {
 }
 
 export async function getAboutContent(): Promise<AboutContent | null> {
-  const response = await fetchStrapi<StrapiResponse<AboutContent>>(
-    "/about?populate=*"
-  );
+  const response =
+    await fetchStrapi<StrapiResponse<AboutContent>>("/about?populate=*");
   const data = response?.data ?? null;
   if (data) {
     writePersistedCache("about", data);
@@ -314,7 +312,7 @@ export async function getAboutContent(): Promise<AboutContent | null> {
 
 export async function getCourses(): Promise<Course[]> {
   const response = await fetchStrapi<StrapiResponse<Course[]>>(
-    "/courses?populate=*&sort=order:asc"
+    "/courses?populate=*&sort=order:asc",
   );
   const data = response?.data ?? [];
   if (data && data.length > 0) {
@@ -331,7 +329,7 @@ export async function getCourses(): Promise<Course[]> {
 
 export async function getContactInfo(): Promise<ContactInfo | null> {
   const response = await fetchStrapi<StrapiResponse<ContactInfo>>(
-    "/contact-info?populate=*"
+    "/contact-info?populate=*",
   );
   const data = response?.data ?? null;
   if (data) {
@@ -347,9 +345,8 @@ export async function getContactInfo(): Promise<ContactInfo | null> {
 }
 
 export async function getSiteSettings(): Promise<SiteSettings | null> {
-  const response = await fetchStrapi<StrapiResponse<SiteSettings>>(
-    "/global?populate=*"
-  );
+  const response =
+    await fetchStrapi<StrapiResponse<SiteSettings>>("/global?populate=*");
   const data = response?.data ?? null;
   if (data) {
     writePersistedCache("siteSettings", data);
@@ -365,7 +362,7 @@ export async function getSiteSettings(): Promise<SiteSettings | null> {
 
 export async function getNews(): Promise<NewsArticle[]> {
   const response = await fetchStrapi<StrapiResponse<NewsArticle[]>>(
-    "/news-articles?populate=*&sort=publishedAt:desc"
+    "/news-articles?populate=*&sort=publishedAt:desc",
   );
   const data = response?.data ?? [];
   if (data && data.length > 0) {
