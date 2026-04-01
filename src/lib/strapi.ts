@@ -218,7 +218,7 @@ async function fetchStrapi<T>(
       ...options,
       headers,
       signal: controller.signal,
-      next: { revalidate: 3600, tags: ["strapi"] }, // 30 min
+      next: { revalidate: 86400, tags: ["strapi"] },
     });
 
     clearTimeout(timeoutId);
@@ -252,9 +252,10 @@ export async function getHeroContent(): Promise<HeroContent | null> {
     writePersistedCache("hero", data);
     return data;
   }
+  // Strapi unavailable — always flag so StrapiRetryAfterSleep triggers
+  usedCacheThisRequest = true;
   const cache = readPersistedCache();
   if (cache?.hero != null) {
-    usedCacheThisRequest = true;
     return cache.hero;
   }
   return null;
@@ -269,9 +270,9 @@ export async function getMissionContent(): Promise<MissionContent | null> {
     writePersistedCache("mission", data);
     return data;
   }
+  usedCacheThisRequest = true;
   const cache = readPersistedCache();
   if (cache?.mission != null) {
-    usedCacheThisRequest = true;
     return cache.mission;
   }
   return null;
@@ -286,9 +287,9 @@ export async function getProjections(): Promise<Projection[]> {
     writePersistedCache("projections", data);
     return data;
   }
+  usedCacheThisRequest = true;
   const cache = readPersistedCache();
   if (cache?.projections != null && cache.projections.length > 0) {
-    usedCacheThisRequest = true;
     return cache.projections;
   }
   return [];
@@ -302,9 +303,9 @@ export async function getAboutContent(): Promise<AboutContent | null> {
     writePersistedCache("about", data);
     return data;
   }
+  usedCacheThisRequest = true;
   const cache = readPersistedCache();
   if (cache?.about != null) {
-    usedCacheThisRequest = true;
     return cache.about;
   }
   return null;
@@ -319,9 +320,9 @@ export async function getCourses(): Promise<Course[]> {
     writePersistedCache("courses", data);
     return data;
   }
+  usedCacheThisRequest = true;
   const cache = readPersistedCache();
   if (cache?.courses != null && cache.courses.length > 0) {
-    usedCacheThisRequest = true;
     return cache.courses;
   }
   return [];
@@ -336,9 +337,9 @@ export async function getContactInfo(): Promise<ContactInfo | null> {
     writePersistedCache("contact", data);
     return data;
   }
+  usedCacheThisRequest = true;
   const cache = readPersistedCache();
   if (cache?.contact != null) {
-    usedCacheThisRequest = true;
     return cache.contact;
   }
   return null;
@@ -352,9 +353,9 @@ export async function getSiteSettings(): Promise<SiteSettings | null> {
     writePersistedCache("siteSettings", data);
     return data;
   }
+  usedCacheThisRequest = true;
   const cache = readPersistedCache();
   if (cache?.siteSettings != null) {
-    usedCacheThisRequest = true;
     return cache.siteSettings;
   }
   return null;
@@ -369,15 +370,16 @@ export async function getNews(): Promise<NewsArticle[]> {
     writePersistedCache("news", data);
     return data;
   }
+  usedCacheThisRequest = true;
   const cache = readPersistedCache();
   if (cache?.news != null && cache.news.length > 0) {
-    usedCacheThisRequest = true;
     return cache.news;
   }
   return [];
 }
 
 // Fallback content when Strapi is not available
+// Last synced from Strapi: 2026-04-01
 export const fallbackContent = {
   hero: {
     title: "Jewish Heritage Education and Advocacy Center",
@@ -400,35 +402,35 @@ export const fallbackContent = {
   },
   projections: [
     {
-      id: 1,
+      id: 2,
       title: "Educational Materials",
       description:
         "Create and deliver impactful educational material on the Holocaust and Jewish culture.",
       year: "2025-2028",
     },
     {
-      id: 2,
+      id: 4,
       title: "Interactive Experiences",
       description:
         "Develop unique museum-style and educational experiences for communities.",
       year: "2025-2028",
     },
     {
-      id: 3,
+      id: 6,
       title: "Partnership Development",
       description:
         "Strengthen partnerships with the Jewish Museum of Chile and expand collaborative projects.",
       year: "2025-2028",
     },
     {
-      id: 4,
+      id: 8,
       title: "Community Engagement",
       description:
         "Engage with Jewish communities across the Americas through events and educational forums.",
       year: "2025-2028",
     },
     {
-      id: 5,
+      id: 10,
       title: "Technology & Innovation",
       description:
         "Leverage technology for virtual exhibitions and digital educational resources.",
@@ -445,39 +447,40 @@ export const fallbackContent = {
       "Resides in the U.S. under an O-1 visa for extraordinary ability in education",
       "A leading voice in Jewish education across Latin America",
       "Established partnerships with ADL and USC Shoah Foundation",
-      "Founder of Red LAJD (Latin American Network for Holocaust Educators)",
-      "Serves on the Advisory Council of JCHL at Brandeis Center",
-      "Co-founder of ICOM International Council of Museums network",
+      "Founder of Red LAES (Latin American Network for Holocaust Educators)",
+      "Serves on the Advisory Council of JOTA at Brandeis University",
+      "Member of ICOM (International Council of Museums)",
     ],
   },
   courses: [
     {
-      id: 1,
-      title: "Holocaust Education Fundamentals",
+      id: 13,
+      title: "The Phoenix's Journey: From Survival to Hope",
       description:
-        "Comprehensive course covering the history, impact, and lessons of the Holocaust for educators and community leaders.",
-      duration: "8 weeks",
-      format: "Online & In-Person",
+        "This documentary follows Holocaust survivor Ana María Wahrenberg's escape from Nazi Germany and her life in Chile, sharing a powerful personal story of resilience and freedom. It promotes critical reflection on the dangers of fanaticism and the challenges of migration.",
+      duration: "20 minutes",
+      format: "Online documentary",
     },
     {
-      id: 2,
-      title: "Jewish Heritage & Culture",
+      id: 11,
+      title: "Itinerant Exhibitions (Traveling Exhibits)",
       description:
-        "Explore the rich tapestry of Jewish traditions, customs, and cultural contributions throughout history.",
-      duration: "6 weeks",
-      format: "Online",
+        "A series of curated exhibitions on Jewish history, culture, and the Holocaust that travel to schools, cultural centers, and public spaces. These exhibits bring educational narratives on intolerance, survival, and multicultural understanding directly to your community.",
+      duration: "Varies by exhibit",
+      format: "In-Person",
     },
     {
-      id: 3,
-      title: "Combating Antisemitism",
+      id: 12,
+      title: "From Prejudice to Genocide",
       description:
-        "Learn effective strategies and approaches to identify, address, and prevent antisemitism in communities.",
-      duration: "4 weeks",
-      format: "Workshop Series",
+        "This course explores how everyday prejudice and discrimination can escalate into violence and genocide. Using the Pyramid of Hate®, it connects Holocaust history with present-day examples to build awareness and responsibility.",
+      duration: "1 hour 30 minutes",
+      format: "Online or in-person session",
     },
   ],
   contact: {
-    email: "JHEACINFO@jewishheritageac.com",
+    email: "daliapollak@jheacenter.com",
+    address: "Florida, USA",
     partnershipTitle: "Interested in joining our global educational mission?",
     partnershipDescription:
       "Become a partner, host institution, or sponsor to bring Jewish history and the fight against hate to audiences across the United States and beyond.",
@@ -489,34 +492,34 @@ export const fallbackContent = {
   },
   news: [
     {
-      id: 1,
+      id: 7,
       title:
         "Dalia Pollak: Pioneering Jewish Education in Chile's Museum Space",
       source: "Vin News",
       url: "https://vinnews.com/2024/07/29/dalia-pollak-pioneering-jewish-education-in-chile-s-museum-space/",
-      publishedAt: "2024-07-29",
+      publishedAt: "2026-01-02T10:09:10.323Z",
       excerpt:
         "An in-depth look at how Dalia Pollak is transforming Jewish education through innovative museum experiences.",
     },
     {
-      id: 2,
-      title:
-        "The Untold Stories: How Jewish Advocate Dalia Pollak Is Leading the Fight Against Modern-Day Anti-Semitism",
-      source: "Matzav",
-      url: "https://matzav.com/the-untold-stories-how-jewish-advocate-dalia-pollak-is-leading-the-fight-against-modern-day-anti-semitism/",
-      publishedAt: "2024-08-15",
-      excerpt:
-        "Discover the untold stories behind Dalia Pollak's advocacy work combating antisemitism worldwide.",
-    },
-    {
-      id: 3,
+      id: 6,
       title:
         "Preserving Memory: Meet Dalia Pollak, The Expert Safeguarding Jewish Cultural Heritage For Future Generations",
       source: "Vents Magazine",
       url: "https://ventsmagazine.com/2024/09/14/preserving-memory-meet-dalia-pollak-the-expert-safeguarding-jewish-cultural-heritage-for-future-generations/",
-      publishedAt: "2024-09-14",
+      publishedAt: "2026-01-02T10:05:46.038Z",
       excerpt:
         "Meet the expert dedicated to preserving Jewish cultural heritage and memory for future generations.",
+    },
+    {
+      id: 4,
+      title:
+        "The Untold Stories: How Jewish Advocate Dalia Pollak Is Leading the Fight Against Modern-Day Anti-Semitism",
+      source: "Matzav",
+      url: "https://matzav.com/the-untold-stories-how-jewish-advocate-dalia-pollak-is-leading-the-fight-against-modern-day-anti-semitism/",
+      publishedAt: "2026-01-02T10:05:45.758Z",
+      excerpt:
+        "Discover the untold stories behind Dalia Pollak's advocacy work combating antisemitism worldwide.",
     },
   ],
 };
